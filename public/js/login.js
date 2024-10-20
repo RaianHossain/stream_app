@@ -1,5 +1,5 @@
-const BASE_URL = 'http://localhost:3000'; // Base URL for the API
-
+//const BASE_URL = 'http://localhost:3000'; // Base URL for the API
+import {API_BASE_URL as BASE_URL} from "./constant.js"
     // Function to handle form submission
     document.getElementById('loginForm').addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent the form from refreshing the page

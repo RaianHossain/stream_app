@@ -35,9 +35,10 @@ app.use((err, req, res, _next) => {
     });
 });
 
-app.listen(3000, () => {
-  console.log("Listening on port 3000");
-  console.log("http://localhost:3000");
+const port = 3000;
+app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
+  //console.log("http://localhost:3000");
 });
 
 module.exports = app;
