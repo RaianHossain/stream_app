@@ -1,0 +1,40 @@
+{
+  "users": [
+    {
+      "id": "6fd3ed42-2275-4d5f-a436-e5a3bf586c56",
+      "password": "$2b$08$0MQjwWxBCYSi0DNt7l2scObHTflcLq0/N/yd43dGFQn0dSuW.M5By",
+      "firstName": "Raian",
+      "lastName": "Hossain",
+      "email": "raiansanil@gmail.com",
+      "role": "super-admin"
+    },
+    {
+      "id": "6955453a-db78-4dac-91a6-822249ea90a8",
+      "password": "$2b$08$nu/nGuUD3iKYjNHOsJ2jPe5VqEkQKQYQkO9MBJBHqAuEy0ZdQ2oSa",
+      "firstName": "Manjurul",
+      "lastName": "Mazid",
+      "avatar": null,
+      "email": "manjurmazid@gmail.com",
+      "role": "super-admin"
+    }
+  ],
+  "streams": [
+    {
+      "id": "d56a7368-4116-44ff-b8fa-f0211eceb396",
+      "title": "Bd Vs Ind T20 Match",
+      "stream": "naz.mp4",
+      "description": "Some randoom text",
+      "adOne": "<script src=\"//embed.bannerboo.com/becd6e73f33ea\" async></script>",
+      "adTwo": "<script src=\"//embed.bannerboo.com/becd6e73f33ea\" async></script>"
+    },
+
+    {
+      "id": "d56a7368-4116-44ff-b8fa-f0211eceb397",
+      "title": "Test Stream",
+      "stream": "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8",
+      "description": "test stream",
+      "adOne": "<script src=\"//embed.bannerboo.com/becd6e73f33ea\" async></script>",
+      "adTwo": "<script src=\"//embed.bannerboo.com/becd6e73f33ea\" async></script>"
+    }
+  ]
+}
