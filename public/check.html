@@ -1,108 +1,69 @@
 <!doctype html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>P2P, HLS, and HTTP Video Streaming</title>
-    <!-- P2P Media Loader Core (For P2P Streaming) -->
-    <script src="https://cdn.jsdelivr.net/npm/p2p-media-loader-core@latest/build/p2p-media-loader-core.min.js"></script>
-    <!-- P2P Media Loader HLS.js -->
-    <script src="https://cdn.jsdelivr.net/npm/p2p-media-loader-hlsjs@latest/build/p2p-media-loader-hlsjs.min.js"></script>
-    <!-- hls.js -->
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        margin: 0;
-        background-color: #f5f5f5;
-      }
+    <!-- Include Hls.js library from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@~1/dist/hls.min.js"></script>
 
-      #video-player {
-        max-width: 800px;
-        width: 100%;
-        margin-bottom: 20px;
-        background-color: #000;
-      }
-
-      #controls {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-      }
-
-      button {
-        padding: 10px;
-        background-color: #007bff;
-        border: none;
-        color: white;
-        cursor: pointer;
-      }
-
-      button:hover {
-        background-color: #0056b3;
-      }
-    </style>
-  </head>
-  <body>
-    <video id="video-player" controls></video>
-
-    <div id="controls">
-      <button onclick="playP2P()">Play P2P Streaming</button>
-      <button onclick="playHLS()">Play HLS Streaming</button>
-      <button onclick="playHTTP()">Play HTTP Streaming</button>
-    </div>
-
-    <script>
-      // Stream URLs (replace with your actual stream URLs)
-      const P2P_STREAM_URL =
-        "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8"; // example P2P stream URL
-      const HLS_STREAM_URL =
-        "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8"; // example HLS stream URL
-      const HTTP_STREAM_URL =
-        "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8"; // example HTTP video URL
-
-      // Video element
-      const video = document.getElementById("video-player");
-
-      // Play P2P stream using p2p-media-loader and hls.js
-      function playP2P() {
-        if (Hls.isSupported()) {
-          // Ensure P2P Media Loader engine is initialized
-          const p2pLoaderConfig = {
-            loader: new p2pml.hlsjs.Engine(),
-            segments: { forwardSegmentCount: 20 }, // Number of segments shared over P2P
-          };
-          const hls = new Hls(p2pLoaderConfig); // Initialize hls.js with P2P loader
-          hls.loadSource(P2P_STREAM_URL); // Load P2P stream
-          hls.attachMedia(video); // Attach the stream to the video element
-          hls.on(Hls.Events.MANIFEST_PARSED, function () {
-            video.play(); // Auto-play when manifest is parsed
-          });
+    <!-- Import map for P2P Media Loader modules -->
+    <script type="importmap">
+      {
+        "imports": {
+          "p2p-media-loader-core": "https://cdn.jsdelivr.net/npm/p2p-media-loader-core@^1/dist/p2p-media-loader-core.es.min.js",
+          "p2p-media-loader-hlsjs": "https://cdn.jsdelivr.net/npm/p2p-media-loader-hlsjs@^1/dist/p2p-media-loader-hlsjs.es.min.js"
         }
-      }
-
-      // Play HLS stream without P2P (fallback or alternative option)
-      function playHLS() {
-        if (Hls.isSupported()) {
-          const hls = new Hls(); // Initialize hls.js without p2p-loader
-          hls.loadSource(HLS_STREAM_URL); // Load HLS stream
-          hls.attachMedia(video); // Attach the stream to the video element
-          hls.on(Hls.Events.MANIFEST_PARSED, function () {
-            video.play(); // Auto-play when manifest is parsed
-          });
-        }
-      }
-
-      // Play HTTP stream (basic .mp4 file, no HLS, no P2P)
-      function playHTTP() {
-        video.src = HTTP_STREAM_URL; // Set the HTTP stream URL (e.g., MP4)
-        video.play(); // Play the video directly
       }
     </script>
+
+    <!-- Include Vidstack player stylesheets -->
+    <link rel="stylesheet" href="https://cdn.vidstack.io/player/theme.css" />
+    <link rel="stylesheet" href="https://cdn.vidstack.io/player/video.css" />
+
+    <!-- Include Vidstack player library from CDN -->
+    <script src="https://cdn.vidstack.io/player" type="module"></script>
+
+    <!-- Module script to initialize Vidstack player with P2P Media Loader -->
+    <script type="module">
+      import { HlsJsP2PEngine } from "p2p-media-loader-hlsjs";
+
+      const player = document.querySelector("media-player");
+      // Inject P2P capabilities into Hls.js
+      const HlsWithP2P = HlsJsP2PEngine.injectMixin(window.Hls);
+
+      player.addEventListener("provider-change", (event) => {
+        const provider = event.detail;
+
+        // Check if the provider is HLS
+        if (provider?.type === "hls") {
+          provider.library = HlsWithP2P;
+
+          provider.config = {
+            p2p: {
+              core: {
+                swarmId: "test893648527354",
+                // other P2P engine config parameters go here
+              },
+              onHlsJsCreated: (hls) => {
+                hls.p2pEngine.addEventListener("onPeerConnect", (params) => {
+                  console.log("Peer connected:", params.peerId);
+                });
+                // Subscribe to P2P engine and Hls.js events here
+              },
+            },
+          };
+        }
+      });
+    </script>
+  </head>
+
+  <body>
+    <div style="width: 800px">
+      <!-- Vidstack media player with HLS stream -->
+      <media-player
+        src="https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8"
+      >
+        <media-provider></media-provider>
+        <media-video-layout></media-video-layout>
+      </media-player>
+    </div>
   </body>
 </html>

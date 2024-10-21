@@ -22,10 +22,23 @@
     {
       "id": "d56a7368-4116-44ff-b8fa-f0211eceb396",
       "title": "Bd Vs Ind T20 Match",
-      "stream": "naz.mp4",
+      "stream": "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8",
       "description": "Some randoom text",
       "adOne": "<script src=\"//embed.bannerboo.com/becd6e73f33ea\" async></script>",
-      "adTwo": "<script src=\"//embed.bannerboo.com/becd6e73f33ea\" async></script>"
+      "adTwo": "<script src=\"//embed.bannerboo.com/becd6e73f33ea\" async></script>",
+      "sessionAd": "<script src=\"//embed.bannerboo.com/becd6e73f33ea\" async></script>",
+      "sessionAd2": "<script src=\"//embed.bannerboo.com/becd6e73f33ea\" async></script>",
+      "popupAds": [
+        {
+          "popupAd": "<script src=\"//embed.bannerboo.com/becd6e73f33ea\" async></script>",
+          "popupAdTimeInterval": "2"
+        },
+        {
+          "popupAd": "<script src=\"//embed.bannerboo.com/becd6e73f33ea\" async></script>",
+          "popupAdTimeInterval": "3"
+        }
+      ],
+      "cretedAt": "2023-05-15T00:00:00.000Z"
     },
 
     {
