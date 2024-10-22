@@ -23,7 +23,7 @@
       "id": "191963e5-5348-484d-9715-0fcf20029cb0",
       "title": "Man on the boat Edited",
       "stream": "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8",
-      "description": "Man on the boat description",
+      "description": "lorem ipsum dolor sit amet, consectetur adip, lorem ipsum dolor sit amet, consectetur adip, lorem ipsum dolor sit amet, consectetur adip, lorem ipsum dolor sit amet, consectetur adip",
       "adOne": "<script src=\\\"//embed.bannerboo.com/becd6e73f33ea\\\" async></script>",
       "adTwo": "<script src=\\\"//embed.bannerboo.com/becd6e73f33ea\\\" async></script>",
       "sessionAds": [
@@ -35,7 +35,7 @@
       "popupAds": [
         {
           "popupAd": "<script src=\\\"//embed.bannerboo.com/becd6e73f33ea\\\" async></script>",
-          "popupAdTimeInterval": "5"
+          "popupAdTimeInterval": "3"
         },
         {
           "popupAd": "<script src=\\\"//embed.bannerboo.com/becd6e73f33ea\\\" async></script>",

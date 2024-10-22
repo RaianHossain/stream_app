@@ -69,7 +69,16 @@
               <media-video-layout></media-video-layout>
             </media-player>
             <!-- Video Title -->
-            <div id="videoTitle" class="video-title">Sample Video Title</div>
+            <div
+              class="border rounded pb-3 ps-2"
+              style="background-color: #faf9f6"
+            >
+              <div id="videoTitle" class="video-title">Sample Video Title</div>
+              <div id="videoDescription" class="video-description">
+                Sample Video Title
+              </div>
+            </div>
+            <div>Peer connected: <span id="peerCount">0</span></div>
           </div>
         </div>
 
@@ -89,19 +98,12 @@
       aria-labelledby="adModalLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-dialog modal modal-dialog-centered">
         <!-- Larger and centered modal -->
-        <div class="modal-content custom-modal-height">
+        <div class="modal-content">
           <div class="modal-body">
-            <p class="text-center">Please click one of the ads below:</p>
             <!-- Centered Text -->
-            <div class="d-flex justify-content-between">
-              <div class="modal-ad" style="margin-right: 15px">
-                Ad 1 (300x250)
-              </div>
-              <!-- Gap between ads -->
-              <!-- <div class="modal-ad">Ad 2 (300x250)</div> -->
-            </div>
+            <div class="modal-ad">Ad 1 (300x250)</div>
           </div>
         </div>
       </div>

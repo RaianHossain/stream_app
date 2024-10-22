@@ -43,8 +43,6 @@ const populateTable = (streams) => {
             row.innerHTML = `
             <td>${stream.title}</td>
             <td>${stream.description}</td>
-            <td>${stream.adOne}</td>
-            <td>${stream.adTwo}</td>
             <td>
                 <a href="show.html?id=${stream.id}"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
                 <button class="btn btn-warning btn-sm" onclick="openEditModal('${stream.id}')" data-toggle="modal" data-target="#addEditModal"><i class="fa fa-pencil-square" aria-hidden="true"></i></button>

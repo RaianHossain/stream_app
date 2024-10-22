@@ -28,10 +28,13 @@ function updateUIWithStreamData(streamData) {
   // Update video player
   const videoPlayer = document.getElementById('videoPlayer');
   // const videoSource = document.getElementById('videoSource');
-  // const videoTitle = document.getElementById('videoTitle');
+  const videoTitle = document.getElementById('videoTitle');
+  const videoDescription = document.getElementById('videoDescription');
+  const peerCountComp = document.getElementById('peerCount');
 
   videoPlayer.src = streamData.stream;
   videoTitle.textContent = streamData.title;
+  videoDescription.textContent = streamData.description;
 
   // // Load the new video source
   // videoPlayer.load();
@@ -40,7 +43,7 @@ function updateUIWithStreamData(streamData) {
   const player = document.querySelector("media-player");
   // Inject P2P capabilities into Hls.js
   const HlsWithP2P = HlsJsP2PEngine.injectMixin(window.Hls);
-
+  let peerCount = 0;
   player.addEventListener("provider-change", (event) => {
     const provider = event.detail;
 
@@ -56,7 +59,18 @@ function updateUIWithStreamData(streamData) {
           },
           onHlsJsCreated: (hls) => {
             hls.p2pEngine.addEventListener("onPeerConnect", (params) => {
+              peerCount++;
+              peerCountComp.innerText = (peerCount);
               console.log("Peer connected:", params.peerId);
+            });
+            hls.p2pEngine.addEventListener("onPeerDisconnect", (params) => {
+              peerCount--;
+              peerCountComp.innerText = (peerCount);
+              console.log("Peer connected:", params.peerId);
+            });
+            hls.p2pEngine.addEventListener("onChunkDownloaded", (params) => {
+              
+              console.log("Chunk Downloadinged");
             });
             // Subscribe to P2P engine and Hls.js events here
           },
@@ -65,6 +79,7 @@ function updateUIWithStreamData(streamData) {
     }
   });
   //
+  // showAdModal(streamData.sessionAds[0].sessionAd);
 
   // Update ads dynamically
   const ad1Container = document.getElementById('ad1');
@@ -81,6 +96,8 @@ function loadAdScript(container, adScriptContent) {
   const scriptElement = document.createElement('script');
   scriptElement.type = 'text/javascript';
 
+  // Optional: Clean the escape characters if present
+  adScriptContent = adScriptContent.replace(/\\"/g, '"'); // Replace \" with "
   // Extract the src from the script content (if needed)
   const srcMatch = adScriptContent.match(/src="([^"]+)"/);
   if (srcMatch && srcMatch[1]) {
@@ -104,7 +121,7 @@ async function init() {
 
   if (streamData) {
     updateUIWithStreamData(streamData);
-    handleSessionAd(streamData.sessionAd);
+    handleSessionAd(streamData.sessionAds);
     handlePopupAds(streamData.popupAds);
   }
 }
@@ -114,25 +131,23 @@ async function init() {
 // Show modal 5 seconds after the session starts
 window.onload = function() {
   init();
-  // setTimeout(function() {
-  //     var adModal = new bootstrap.Modal(document.getElementById('adModal'));
-  //     adModal.show();
-  // }, 1000);
 };
 
 function showAdModal(adContent) {
-  document.querySelector('.modal-ad').innerHTML = adContent;
+  pauseStream();
+  const asContainer = document.querySelector('.modal-ad');
+  loadAdScript(asContainer, adContent);
   const adModal = new bootstrap.Modal(document.getElementById('adModal'));
   adModal.show();
 }
 
-function handleSessionAd(sessionAd) {
+function handleSessionAd(sessionAds) {
   const lastAdTime = localStorage.getItem('lastAdTime');
   const now = Date.now();
 
   if(!lastAdTime || now - lastAdTime > 24 * 60 * 60 * 1000) {
     setTimeout(() => {
-      showAdModal(sessionAd);
+      showAdModal(sessionAds[0].sessionAd);
       localStorage.setItem('lastAdTime', now);
     }, 1 * 60 * 1000);
   }
@@ -154,8 +169,26 @@ function handlePopupAds(popupAds) {
   })
 }
 
+function pauseStream() {
+  const player = document.querySelector("media-player");
+  player.pause();
+}
+
+function playStream() {
+  const player = document.querySelector("media-player");
+  player.play();
+}
+
 function createPopupAdTimeout(adContent, delay) {
   setTimeout(() => {
     showAdModal(adContent);
   }, delay); // Delay is in milliseconds
+}
+
+document.getElementById('adModal').addEventListener('hidden.bs.modal', () => {
+  playStream();
+})
+
+function closeAdModal() {
+  $('#adModal').modal('hide');
 }
