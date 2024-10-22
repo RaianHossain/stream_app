@@ -31,20 +31,27 @@ const getStream = async (req, res) => {
 const createStream = async (req, res) => {
     const {db} = req.app;
     const {title, stream, description, adOne, adTwo} = req.body;
+    try{
     if(!title || !stream || !description || !adOne || !adTwo) {
         return res.status(400).json({ error: "Please provide title, stream, description, adOne and adTwo" });
     }
-    const newStream = {
+    let newStream = {
         id: crypto.randomUUID({ disableEntropyCache: true }),
         title,
         stream,
         description,
         adOne,
-        adTwo
+        adTwo,        
     }
-    try {
-        const stream = db.get("streams").push(newStream).write();
-        res.status(200).json(stream);
+    if(req.body.sessionAds) {
+        newStream = {...newStream, sessionAds: req.body.sessionAds}
+    }
+    if(req.body.popupAds) {
+        newStream = {...newStream, popupAds: req.body.popupAds}    
+    }
+    
+        const savedStream = db.get("streams").push(newStream).write();
+        res.status(200).json(savedStream);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });

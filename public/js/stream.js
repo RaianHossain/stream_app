@@ -1,7 +1,6 @@
 
 import { API_BASE_URL as BASE_URL } from "./constant.js";
 
-// const BASE_URL = "http://localhost:3000";
 const user = JSON.parse(localStorage.getItem("user"));
 const token = localStorage.getItem("token");
 let streams = [];
@@ -18,8 +17,8 @@ const fetchStreams = async () => {
         const response = await fetch(`${BASE_URL}/api/streams`, {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${token}`, // Include the Bearer token
-                'Content-Type': 'application/json', // Optional, depending on your API
+                'Authorization': `Bearer ${token}`, 
+                'Content-Type': 'application/json', 
             }
         });
         console.log(response);
@@ -27,7 +26,6 @@ const fetchStreams = async () => {
             throw new Error('Network response was not ok ' + response.statusText);
         }
         streams = await response.json();
-        console.log(streams);
         populateTable(streams);
     } catch (error) {
         // populateTable([]);
@@ -35,7 +33,6 @@ const fetchStreams = async () => {
     }
 };
 
-// Populate the table with user data
 const populateTable = (streams) => {
     
     tableBody.innerHTML = ''; // Clear existing table data
@@ -78,7 +75,6 @@ const deleteStream = async (streamId) => {
 
         console.log(`Stream with ID ${streamId} deleted successfully`);
 
-        // Remove the row from the table after successful deletion
         fetchStreams();
 
     } catch (error) {
@@ -86,159 +82,225 @@ const deleteStream = async (streamId) => {
     }
 };
 
-let isEdit = false;  // to track if we are editing or adding a user
-let currentStreamId = null; // to hold the ID of the user being edited
+const removeAd = (adGroupId) => {
+    document.getElementById(adGroupId).remove();
+  };
 
-// Function to open the modal for adding a user
+let isEdit = false;  
+let currentStreamId = null; 
+
+let sessionAdCount = 1;
+let popupAdCount = 1;
+
+const addSessionAd = () => {
+    const sessionAdContainer = document.getElementById('sessionAdContainer');
+    const adHtml = `
+      <div class="d-flex mb-2" id="sessionAdGroup${sessionAdCount}">
+        <input type="text" class="form-control" id="sessionAd${sessionAdCount}" name="sessionAds[${sessionAdCount}][sessionAd]" placeholder="Session Ad ${sessionAdCount}" />
+        <input type="number" class="form-control mx-2" id="sessionAdTimeInterval${sessionAdCount}" name="sessionAds[${sessionAdCount}][sessionAdTimeInterval]" placeholder="Time Interval (minutes)" />
+        <button type="button" class="btn btn-danger" onclick="removeAd('sessionAdGroup${sessionAdCount}')">-</button>
+      </div>
+    `;
+    sessionAdContainer.insertAdjacentHTML('beforeend', adHtml);
+    sessionAdCount++;
+  };
+
+const addPopupAd = () => {
+    const popupAdContainer = document.getElementById('popupAdContainer');
+    const adHtml = `
+      <div class="d-flex mb-2" id="popupAdGroup${popupAdCount}">
+        <input type="text" class="form-control" id="popupAd${popupAdCount}" name="popupAds[${popupAdCount}][popupAd]" placeholder="Popup Ad ${popupAdCount}" />
+        <input type="number" class="form-control mx-2" id="popupAdTimeInterval${popupAdCount}" name="popupAds[${popupAdCount}][popupAdTimeInterval]" placeholder="Time Interval (minutes)" />
+        <button type="button" class="btn btn-danger" onclick="removeAd('popupAdGroup${popupAdCount}')">-</button>
+      </div>
+    `;
+    popupAdContainer.insertAdjacentHTML('beforeend', adHtml);
+    popupAdCount++;
+  };
 const openAddModal = () => {
-    //empty data-error error errorMessageHolder
     const errorMessageHolder = document.getElementById('data-error');
     errorMessageHolder.textContent = "";
 
-    // Clear the form
     document.getElementById('addEditStreamForm').reset();
 
-    // Update modal title and reset flags
     document.getElementById('addEditModalTitle').textContent = "Add New Stream";
 
     isEdit = false;
     currentStreamId = null;
 
-    // Show the modal
     $('#addEditModal').modal('show');
 };
 
-// Function to open the modal for editing a user
+
 const openEditModal = (streamId) => {
-    //empty data-error error errorMessageHolder
     const errorMessageHolder = document.getElementById('data-error');
     errorMessageHolder.textContent = "";
-
-    // Fetch the user details (replace this with your actual data source)
+  
     const stream = streams.find(s => s.id === streamId);
-
+  
     if (stream) {
-        // Populate the form with existing user data
-        document.getElementById('title').value = stream.title;
-        document.getElementById('description').value = stream.description;
-        document.getElementById('stream').value = stream.stream;
-        document.getElementById('adOne').value = stream.adOne;
-        document.getElementById('adTwo').value = stream.adTwo;
-
-        // Update modal title and set flags
-        document.getElementById('addEditModalTitle').textContent = "Edit Stream";
-
-        
-        isEdit = true;
-        currentStreamId = streamId;
-
-        // Show the modal
-        $('#addEditModal').modal('show');
+      document.getElementById('title').value = stream.title;
+      document.getElementById('description').value = stream.description;
+      document.getElementById('stream').value = stream.stream;
+      document.getElementById('adOne').value = stream.adOne;
+      document.getElementById('adTwo').value = stream.adTwo;
+  
+      // Clear and populate session ads
+      const sessionAdContainer = document.getElementById('sessionAdContainer');
+      sessionAdContainer.innerHTML = '';
+      sessionAdCount = 1;
+      stream.sessionAds.forEach(ad => {
+        addSessionAd();
+        document.getElementById(`sessionAd${sessionAdCount - 1}`).value = ad.sessionAd;
+        document.getElementById(`sessionAdTimeInterval${sessionAdCount - 1}`).value = ad.sessionAdTimeInterval;
+      });
+  
+      // Clear and populate popup ads
+      const popupAdContainer = document.getElementById('popupAdContainer');
+      popupAdContainer.innerHTML = '';
+      popupAdCount = 1;
+      stream.popupAds.forEach(ad => {
+        addPopupAd();
+        document.getElementById(`popupAd${popupAdCount - 1}`).value = ad.popupAd;
+        document.getElementById(`popupAdTimeInterval${popupAdCount - 1}`).value = ad.popupAdTimeInterval;
+      });
+  
+      document.getElementById('addEditModalTitle').textContent = "Edit Stream";
+      isEdit = true;
+      currentStreamId = streamId;
+  
+      $('#addEditModal').modal('show');
     }
-};
-
-// Function to handle saving changes
-const saveChanges = async () => {
-    //empty data-error error errorMessageHolder
+  };
+  
+  const saveChanges = async () => {
     const errorMessageHolder = document.getElementById('data-error');
     errorMessageHolder.textContent = "";
-
+  
     const title = document.getElementById('title').value;
     const description = document.getElementById('description').value;
     const stream = document.getElementById('stream').value;
     const adOne = document.getElementById('adOne').value;
     const adTwo = document.getElementById('adTwo').value;
-    
-    // Collect the data to be sent to the server
-    const streamData = {
-        title,
-        description,
-        stream,
-        adOne,
-        adTwo
+  
+    const sessionAds = [];
+    if(sessionAdCount > 0){
+        for (let i = 1; i < sessionAdCount; i++) {
+            sessionAds.push({
+                sessionAd: document.getElementById(`sessionAd${i}`).value,
+                sessionAdTimeInterval: document.getElementById(`sessionAdTimeInterval${i}`).value
+            });
+        }
+    }
+    const popupAds = [];
+    if(popupAdCount > 0) {
+        for (let i = 1; i < popupAdCount; i++) {
+        popupAds.push({
+            popupAd: document.getElementById(`popupAd${i}`).value,
+            popupAdTimeInterval: document.getElementById(`popupAdTimeInterval${i}`).value
+        });
+        }
+    }
+  
+    let streamData = {
+      title,
+      description,
+      stream,
+      adOne,
+      adTwo
     };
 
-   
-    const token = localStorage.getItem('token');
-
-    try {
-        if (isEdit) {
-            // If editing, send PUT request to update user
-            const response = await fetch(`${BASE_URL}/api/streams/${currentStreamId}`, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(streamData)
-            });
-            if (!response.ok) {
-                const data = await response.json();
-                if(data.error) {
-                    const errorMessageHolder = document.getElementById('data-error');
-                    errorMessageHolder.textContent = data.error;
-                }
-                throw new Error('Failed to update stream')
-            };
-            alert("Stream updated successfully");
-        } else {
-            // If adding, send POST request to create new user
-            const response = await fetch(`${BASE_URL}/api/streams`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(streamData)
-            });
-            
-            if (!response.ok) {
-                const data = await response.json();
-                if(data.error) {
-                    const errorMessageHolder = document.getElementById('data-error');
-                    errorMessageHolder.textContent = data.error;
-                }
-                throw new Error('Failed to create stream')
-            };
-            alert("Stream created successfully");
-        }
-
-        // Close the modal and reload the data
-        $('#addEditModal').modal('hide');
-        fetchStreams(); // Reload the table after saving
-    } catch (error) {
-        console.error("Error saving changes:", error);
-        alert("Error saving changes");
+    if(sessionAdCount > 0) {
+        streamData = {...streamData, sessionAds}
     }
-};
+    if(popupAdCount > 0) {
+        streamData = {...streamData, popupAds}
+    }
+  
+    const token = localStorage.getItem('token');
+  
+    try {
+      if (isEdit) {
+        const response = await fetch(`${BASE_URL}/api/streams/${currentStreamId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(streamData)
+        });
+  
+        const result = await response.json();
+        if (response.status === 200) {
+          fetchStreams();
+          $('#addEditModal').modal('hide');
+        } else {
+          errorMessageHolder.textContent = result.error || "An error occurred.";
+        }
+      } else {
+        alert("saving");
+        const response = await fetch(`${BASE_URL}/api/streams`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(streamData)
+        });
+
+        const result = await response.json();
+
+        try {
+            if(response.status === 200){
+                alert("saved");
+                fetchStreams();
+                $('#addEditModal').modal('hide');
+              } else {
+                errorMessageHolder.textContent = result.error || "An error occurred.";
+              }
+        } catch (error) {
+            console.log(error);
+        }
+        
+      }
+    } catch (error) {
+      errorMessageHolder.textContent = "Failed to save the stream.";
+    }
+  };
 
 function closeModal() {
     $('#addEditModal').modal('hide'); // This hides the modal
+    if(sessionAdCount > 0){
+        for (let i = 1; i < sessionAdCount; i++) {
+            removeAd(`sessionAdGroup${i}`);
+        }
+    }
+    if(popupAdCount > 0){
+        for (let i = 1; i < popupAdCount; i++) {
+            removeAd(`popupAdGroup${i}`);
+        }
+    }
   }
-  
-
-// Attach event listeners
-document.getElementById('saveChangesButton').addEventListener('click', saveChanges);
 
 
-
-
-// Throttle resize event handler to avoid too many calls
 let resizeTimeout;
 window.addEventListener('resize', () => {
-    clearTimeout(resizeTimeout); // Clear previous timeout
+    clearTimeout(resizeTimeout); 
     resizeTimeout = setTimeout(() => {
         console.log('Resizing...', streams);
         if (streams.length > 0) {
-            populateTable(streams); // Repopulate the table on resize
+            populateTable(streams); 
         }
-    }, 250); // Adjust the delay as needed
+    }, 250); 
 });
 
 
-// Fetch users on page load
 window.onload = fetchStreams;
 window.openAddModal = openAddModal;
 window.openEditModal = openEditModal;
 window.closeModal = closeModal;
 window.deleteStream = deleteStream;
+window.addSessionAd = addSessionAd;
+window.addPopupAd = addPopupAd;
+window.removeAd = removeAd;
+window.saveChanges = saveChanges;
