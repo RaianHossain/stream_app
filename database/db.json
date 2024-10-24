@@ -1,14 +1,5 @@
 {
-  "users": [
-    {
-      "id": "6fd3ed42-2275-4d5f-a436-e5a3bf586c56",
-      "password": "$2b$08$0MQjwWxBCYSi0DNt7l2scObHTflcLq0/N/yd43dGFQn0dSuW.M5By",
-      "firstName": "Raian",
-      "lastName": "Hossain",
-      "email": "raiansanil@gmail.com",
-      "role": "super-admin"
-    }
-  ],
+  "users": [],
   "streams": [
     {
       "id": "191963e5-5348-484d-9715-0fcf20029cb0",
