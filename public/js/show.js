@@ -2,10 +2,11 @@
 
 import { HlsJsP2PEngine } from "p2p-media-loader-hlsjs";
 import { API_BASE_URL } from './constant.js';
+
 // Function to get the stream ID from URL query parameter
 function getStreamIdFromURL() {
   const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get('id'); // assuming the param is 'streamId'
+  return urlParams.get('id'); 
 }
 
 // Fetch stream data from the API
@@ -36,10 +37,7 @@ function updateUIWithStreamData(streamData) {
   videoTitle.textContent = streamData.title;
   videoDescription.textContent = streamData.description;
 
-  // // Load the new video source
-  // videoPlayer.load();
-
-  //
+  
   const player = document.querySelector("media-player");
   // Inject P2P capabilities into Hls.js
   const HlsWithP2P = HlsJsP2PEngine.injectMixin(window.Hls);
@@ -96,15 +94,15 @@ function loadAdScript(container, adScriptContent) {
   const scriptElement = document.createElement('script');
   scriptElement.type = 'text/javascript';
 
-  // Optional: Clean the escape characters if present
+  //Clean the escape characters if present
   adScriptContent = adScriptContent.replace(/\\"/g, '"'); // Replace \" with "
   // Extract the src from the script content (if needed)
   const srcMatch = adScriptContent.match(/src="([^"]+)"/);
   if (srcMatch && srcMatch[1]) {
     scriptElement.src = srcMatch[1];
     scriptElement.async = true;
-    container.innerHTML = ''; // Clear any existing content
-    container.appendChild(scriptElement); // Append the script to execute it
+    container.innerHTML = ''; 
+    container.appendChild(scriptElement); 
   }
 }
 
@@ -126,9 +124,7 @@ async function init() {
   }
 }
 
-// Initialize the page when loaded
-// window.onload = init;
-// Show modal 5 seconds after the session starts
+
 window.onload = function() {
   init();
 };
@@ -154,8 +150,8 @@ function handleSessionAd(sessionAds) {
 }
 
 function handlePopupAds(popupAds) {
-  // const creationTime = new Date(createdAt).getTime();
-  const creationTime = Date.now() - 1 * 60 * 1000;
+  const creationTime = new Date(createdAt).getTime();
+  // const creationTime = Date.now() - 1 * 60 * 1000;
   const now = Date.now();
 
   popupAds.forEach(popupAd => {

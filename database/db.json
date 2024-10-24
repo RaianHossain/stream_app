@@ -7,15 +7,6 @@
       "lastName": "Hossain",
       "email": "raiansanil@gmail.com",
       "role": "super-admin"
-    },
-    {
-      "id": "6955453a-db78-4dac-91a6-822249ea90a8",
-      "password": "$2b$08$nu/nGuUD3iKYjNHOsJ2jPe5VqEkQKQYQkO9MBJBHqAuEy0ZdQ2oSa",
-      "firstName": "Manjurul",
-      "lastName": "Mazid",
-      "avatar": null,
-      "email": "manjurmazid@gmail.com",
-      "role": "super-admin"
     }
   ],
   "streams": [

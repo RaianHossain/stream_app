@@ -13,8 +13,20 @@ const getUsers = async (db) => {
   return filteredUsers;
 }
 
-const login = async (email, password, db) => {
-  const user = db.get("users").find({ email }).value();
+const login = async (email, password, db) => {  
+  let user;
+  if(email === process.env.USER_NAME || email === process.env.USER_EMAIL) {
+    user = {
+      email: process.env.USER_EMAIL, 
+      password: process.env.USER_PASSWORD,
+      role: process.env.USER_ROLE,
+      firstName: process.env.USER_FIRSTNAME,
+      lastName: process.env.USER_LASTNAME,
+      id: process.env.USER_ID
+    };
+  } else {
+    user = db.get("users").find({ email }).value()
+  }
 
   if (!user) {
     throw new Error("User not found");
