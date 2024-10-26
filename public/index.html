@@ -309,21 +309,21 @@
               </div>
               <div class="form-group">
                 <label for="adOne">Main Ad 1:</label>
-                <input
+                <textarea
                   type="text"
                   class="form-control"
                   id="adOne"
                   name="adOne"
-                />
+                ></textarea>
               </div>
               <div class="form-group">
                 <label for="adTwo">Main Ad 2:</label>
-                <input
+                <textarea
                   type="text"
                   class="form-control"
                   id="adTwo"
                   name="adTwo"
-                />
+                ></textarea>
               </div>
 
               <!-- Session Ads Section -->
@@ -343,20 +343,12 @@
               </div>
 
               <!-- Popup Ads Section -->
-              <div
-                class="form-group border p-3 rounded mt-3"
-                style="background-color: #f8f9fa"
-              >
+              <div class="form-group border p-3 rounded mt-3" style="background-color: #f8f9fa">
                 <h6>Popup Ads</h6>
                 <div id="popupAdContainer"></div>
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  onclick="addPopupAd()"
-                >
-                  + Add Popup Ad
-                </button>
+                <button type="button" class="btn btn-secondary" onclick="addPopupAd()">+ Add Popup Ad</button>
               </div>
+
             </form>
             <p id="data-error" class="text-danger"></p>
           </div>

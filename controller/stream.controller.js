@@ -29,50 +29,73 @@ const getStream = async (req, res) => {
 }
 
 const createStream = async (req, res) => {
-    const {db} = req.app;
-    const {title, stream, description, adOne, adTwo} = req.body;
-    try{
-    if(!title || !stream || !description || !adOne || !adTwo) {
-        return res.status(400).json({ error: "Please provide title, stream, description, adOne and adTwo" });
-    }
-    let newStream = {
-        id: crypto.randomUUID({ disableEntropyCache: true }),
-        title,
-        stream,
-        description,
-        adOne,
-        adTwo,        
-    }
-    if(req.body.sessionAds) {
-        newStream = {...newStream, sessionAds: req.body.sessionAds}
-    }
-    if(req.body.popupAds) {
-        newStream = {...newStream, popupAds: req.body.popupAds}    
-    }
-    
+    const { db } = req.app;
+    const { title, stream, description, adOne, adTwo, sessionAds, popupAds } = req.body; // Destructure popupAds here
+    try {
+        if (!title || !stream || !description || !adOne || !adTwo) {
+            return res.status(400).json({ error: "Please provide title, stream, description, adOne, and adTwo" });
+        }
+
+        // Create new stream object with unique id
+        let newStream = {
+            id: crypto.randomUUID({ disableEntropyCache: true }),
+            title,
+            stream,
+            description,
+            adOne,
+            adTwo,
+        };
+
+        // If sessionAds exist, include them
+        if (sessionAds) {
+            newStream = { ...newStream, sessionAds };
+        }
+        // If popupAds exist, include them
+        if (popupAds) {
+            newStream = { ...newStream, popupAds };
+        }
+
+        // Save the new stream in the database
         const savedStream = db.get("streams").push(newStream).write();
         res.status(200).json(savedStream);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });
     }
-}
+};
+
 
 const updateStream = (req, res) => {
     try {
-        const {db} = req.app;
-        const {id} = req.params;
-        const {title, stream, description, adOne, adTwo} = req.body;
-        if(!title || !stream || !description || !adOne || !adTwo) {
-            return res.status(400).json({ error: "Please provide title, stream, description, adOne and adTwo" });
+        const { db } = req.app;
+        const { id } = req.params;
+        const { title, stream, description, adOne, adTwo, sessionAds, popupAds } = req.body; // Destructure popupAds here
+
+        if (!title || !stream || !description || !adOne || !adTwo) {
+            return res.status(400).json({ error: "Please provide title, stream, description, adOne, and adTwo" });
         }
-        const streamToUpdate = db.get("streams").find({id}).assign({title, stream, description, adOne, adTwo}).write();
+
+        // Find the stream to update and assign new values
+        const streamToUpdate = db.get("streams")
+            .find({ id })
+            .assign({
+                title,
+                stream,
+                description,
+                adOne,
+                adTwo,
+                sessionAds, // Include sessionAds if provided
+                popupAds // Include popupAds if provided
+            })
+            .write();
+
         res.status(200).json(streamToUpdate);
     } catch (error) {
+        console.error(error);
         res.status(500).json({ error: error.message });
     }
-    
-}
+};
+
 
 const deleteStream = (req, res) => {
     try {

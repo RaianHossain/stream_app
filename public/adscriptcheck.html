@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Streaming</title>
+    <!-- Bootstrap 5 CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/show.css" />
+
+    <!-- Include Hls.js library from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@~1/dist/hls.min.js"></script>
+
+    <!-- Import map for P2P Media Loader modules -->
+    <script type="importmap">
+      {
+        "imports": {
+          "p2p-media-loader-core": "https://cdn.jsdelivr.net/npm/p2p-media-loader-core@^1/dist/p2p-media-loader-core.es.min.js",
+          "p2p-media-loader-hlsjs": "https://cdn.jsdelivr.net/npm/p2p-media-loader-hlsjs@^1/dist/p2p-media-loader-hlsjs.es.min.js"
+        }
+      }
+    </script>
+
+    <!-- Include Vidstack player stylesheets -->
+    <link rel="stylesheet" href="https://cdn.vidstack.io/player/theme.css" />
+    <link rel="stylesheet" href="https://cdn.vidstack.io/player/video.css" />
+
+    <!-- Include Vidstack player library from CDN -->
+    <script src="https://cdn.vidstack.io/player" type="module"></script>
+  </head>
+  <body>
+    <!-- <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Streaming</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNavDropdown"
+          aria-controls="navbarNavDropdown"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="index.html"
+                >Streams</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav> -->
+
+    <div class="container-fluid main-content">
+      <div class="row desktop-view">
+        <!-- Video player section -->
+        <div class="col-12 col-md-8">
+          <div class="video-container">
+            <!-- Video Title -->
+            <h3 id="videoTitle" class="video-title p-2 border rounded">Sample Video Title</h3>
+            <!-- Vidstack media player with HLS stream -->
+
+            <media-player id="videoPlayer">
+              <media-provider></media-provider>
+              <media-video-layout></media-video-layout>
+            </media-player>
+            
+            <div
+              class="border rounded pb-3 ps-2"
+              style="background-color: #faf9f6"
+              id="description-div"
+            >              
+              <div id="videoDescription" class="video-description">
+                Sample Video Description
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ads section -->
+        <div class="col-12 col-md-4 ads-container">
+          <div id="ad1" class="ad">
+            <script type="text/javascript">
+              atOptions = {
+                'key' : '28f2c7244a77fec4d34e6491ab667a5d',
+                'format' : 'iframe',
+                'height' : 250,
+                'width' : 300,
+                'params' : {}
+              };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/28f2c7244a77fec4d34e6491ab667a5d/invoke.js"></script>
+          </div>
+          <div id="ad2" class="ad">Ad 2 (336x280)</div>
+        </div>
+      </div>
+    </div>
+
+   
+    <!-- Bootstrap 5 JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
+   
+  </body>
+</html>
