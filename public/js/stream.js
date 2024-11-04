@@ -73,7 +73,9 @@ const deleteStream = async (streamId) => {
 
         console.log(`Stream with ID ${streamId} deleted successfully`);
 
-        fetchStreams();
+        setTimeout(() => {
+          fetchStreams();
+        }, 1000);
 
     } catch (error) {
         console.error("Error deleting stream:", error);
@@ -97,78 +99,78 @@ const removeAd = (type, adGroupId) => {
     }
   };
 
+// Function to add Session Ad fields
 const addSessionAd = () => {
-    const sessionAdContainer = document.getElementById('sessionAdContainer');
-    const adHtml = `
-      <div class="d-flex mb-2" id="sessionAdGroup${sessionAdCount}">
-        <input type="text" class="form-control" id="sessionAd${sessionAdCount}" name="sessionAds[${sessionAdCount}][sessionAd]" placeholder="Session Ad ${sessionAdCount}" />
-        <input type="number" class="form-control mx-2" id="sessionAdTimeInterval${sessionAdCount}" name="sessionAds[${sessionAdCount}][sessionAdTimeInterval]" placeholder="Time Interval (minutes)" />
-        <button type="button" class="btn btn-danger" onclick="removeAd('sessionAd','sessionAdGroup${sessionAdCount}')">-</button>
-      </div>
-    `;
-    sessionAdContainer.insertAdjacentHTML('beforeend', adHtml);
-    sessionAdCount++;
-  };
-
-const addPopupAd = () => {
-    const popupAdContainer = document.getElementById('popupAdContainer');
-    const adHtml = `
-      <div class="border p-3 rounded mb-2" id="popupAdGroup${popupAdCount}">
-        <input type="text" class="form-control mb-2" id="popupAdImgSrc${popupAdCount}" name="popupAds[${popupAdCount}][imgSrc]" placeholder="Image Source URL" />
-        <input type="text" class="form-control mb-2" id="popupAdIFrameSrc${popupAdCount}" name="popupAds[${popupAdCount}][iFrameSrc]" placeholder="iFrame Source URL" />
-        <input type="number" class="form-control mb-2" id="popupAdTimeInterval${popupAdCount}" name="popupAds[${popupAdCount}][popupAdTimeInterval]" placeholder="Time Interval (minutes)" />
-        <input type="text" class="form-control mb-2" id="popupAdTitle${popupAdCount}" name="popupAds[${popupAdCount}][adTitle]" placeholder="Ad Title" />
-        <input type="number" class="form-control mb-2" id="popupAdTimer${popupAdCount}" name="popupAds[${popupAdCount}][timer]" placeholder="Timer (seconds)" />
-        <button type="button" class="btn btn-danger" onclick="removeAd('popupAd', 'popupAdGroup${popupAdCount}')">-</button>
-      </div>
-    `;
-    popupAdContainer.insertAdjacentHTML('beforeend', adHtml);
-    popupAdCount++;
+  const sessionAdContainer = document.getElementById('sessionAdContainer');
+  const adHtml = `
+    <div class="d-flex mb-2" id="sessionAdGroup${sessionAdCount}">
+      <textarea class="form-control" id="sessionAd${sessionAdCount}" name="sessionAds[${sessionAdCount}][sessionAd]" placeholder="Session Ad ${sessionAdCount}"></textarea>
+      <input type="number" class="form-control mx-2" id="sessionAdTimeInterval${sessionAdCount}" name="sessionAds[${sessionAdCount}][sessionAdTimeInterval]" placeholder="Time Interval (seconds)" />
+      <input type="text" class="form-control mx-2" id="sessionAdTitle${sessionAdCount}" name="sessionAds[${sessionAdCount}][adTitle]" placeholder="Ad Title" />
+      <button type="button" class="btn btn-danger" onclick="removeAd('sessionAd','sessionAdGroup${sessionAdCount}')">-</button>
+    </div>
+  `;
+  sessionAdContainer.insertAdjacentHTML('beforeend', adHtml);
+  sessionAdCount++;
 };
 
+// Function to add Popup Ad fields
+const addPopupAd = () => {
+  const popupAdContainer = document.getElementById('popupAdContainer');
+  const adHtml = `
+    <div class="border p-3 rounded mb-2" id="popupAdGroup${popupAdCount}">
+      <textarea class="form-control mb-2" id="popupAd${popupAdCount}" name="popupAds[${popupAdCount}][popupAd]" placeholder="Popup Ad ${popupAdCount}"></textarea>
+      <input type="number" class="form-control mb-2" id="popupAdTimeInterval${popupAdCount}" name="popupAds[${popupAdCount}][popupAdTimeInterval]" placeholder="Time Interval (seconds)" />
+      <input type="text" class="form-control mb-2" id="popupAdTitle${popupAdCount}" name="popupAds[${popupAdCount}][adTitle]" placeholder="Ad Title" />
+      <input type="number" class="form-control mb-2" id="popupAdTimer${popupAdCount}" name="popupAds[${popupAdCount}][timer]" placeholder="Timer (seconds)" />
+      <button type="button" class="btn btn-danger" onclick="removeAd('popupAd', 'popupAdGroup${popupAdCount}')">-</button>
+    </div>
+  `;
+  popupAdContainer.insertAdjacentHTML('beforeend', adHtml);
+  popupAdCount++;
+};
+
+// Function to open the edit modal and populate fields
 const openEditModal = (streamId) => {
-    const errorMessageHolder = document.getElementById('data-error');
-    errorMessageHolder.textContent = "";
+  const errorMessageHolder = document.getElementById('data-error');
+  errorMessageHolder.textContent = "";
 
-    const stream = streams.find(s => s.id === streamId);
+  const stream = streams.find(s => s.id === streamId);
 
-    if (stream) {
-      // Populate stream fields
-      document.getElementById('title').value = stream.title;
-      document.getElementById('description').value = stream.description;
-      document.getElementById('stream').value = stream.stream;
-      document.getElementById('adOne').value = stream.adOne;
-      document.getElementById('adTwo').value = stream.adTwo;
+  if (stream) {
+    document.getElementById('title').value = stream.title;
+    document.getElementById('description').value = stream.description;
+    document.getElementById('stream').value = stream.stream;
+    document.getElementById('adOne').value = stream.adOne;
+    document.getElementById('adTwo').value = stream.adTwo;
 
-      // Populate session ads
-      const sessionAdContainer = document.getElementById('sessionAdContainer');
-      sessionAdContainer.innerHTML = '';
-      sessionAdCount = 1;
-      stream.sessionAds.forEach(ad => {
-        addSessionAd();
-        document.getElementById(`sessionAd${sessionAdCount - 1}`).value = ad.sessionAd;
-        document.getElementById(`sessionAdTimeInterval${sessionAdCount - 1}`).value = ad.sessionAdTimeInterval;
-      });
+    const sessionAdContainer = document.getElementById('sessionAdContainer');
+    sessionAdContainer.innerHTML = '';
+    sessionAdCount = 1;
+    stream.sessionAds.forEach(ad => {
+      addSessionAd();
+      document.getElementById(`sessionAd${sessionAdCount - 1}`).value = ad.sessionAd;
+      document.getElementById(`sessionAdTimeInterval${sessionAdCount - 1}`).value = ad.sessionAdTimeInterval;
+      document.getElementById(`sessionAdTitle${sessionAdCount - 1}`).value = ad.adTitle;
+    });
 
-      // Populate popup ads
-      const popupAdContainer = document.getElementById('popupAdContainer');
-      popupAdContainer.innerHTML = '';
-      popupAdCount = 1;
-      stream.popupAds.forEach(ad => {
-        addPopupAd();
-        document.getElementById(`popupAdImgSrc${popupAdCount - 1}`).value = ad.imgSrc;
-        document.getElementById(`popupAdIFrameSrc${popupAdCount - 1}`).value = ad.iFrameSrc;
-        document.getElementById(`popupAdTimeInterval${popupAdCount - 1}`).value = ad.popupAdTimeInterval;
-        document.getElementById(`popupAdTitle${popupAdCount - 1}`).value = ad.adTitle;
-        document.getElementById(`popupAdTimer${popupAdCount - 1}`).value = ad.timer;
-      });
+    const popupAdContainer = document.getElementById('popupAdContainer');
+    popupAdContainer.innerHTML = '';
+    popupAdCount = 1;
+    stream.popupAds.forEach(ad => {
+      addPopupAd();
+      document.getElementById(`popupAd${popupAdCount - 1}`).value = ad.popupAd;
+      document.getElementById(`popupAdTimeInterval${popupAdCount - 1}`).value = ad.popupAdTimeInterval;
+      document.getElementById(`popupAdTitle${popupAdCount - 1}`).value = ad.adTitle;
+      document.getElementById(`popupAdTimer${popupAdCount - 1}`).value = ad.timer;
+    });
 
-      document.getElementById('addEditModalTitle').textContent = "Edit Stream";
-      isEdit = true;
-      currentStreamId = streamId;
+    document.getElementById('addEditModalTitle').textContent = "Edit Stream";
+    isEdit = true;
+    currentStreamId = streamId;
 
-      $('#addEditModal').modal('show');
-    }
+    $('#addEditModal').modal('show');
+  }
 };
 
 const openAddModal = () => {
@@ -185,79 +187,70 @@ const openAddModal = () => {
     $('#addEditModal').modal('show');
 };
 
+// Function to save changes to the stream
 const saveChanges = async () => {
-    const errorMessageHolder = document.getElementById('data-error');
-    errorMessageHolder.textContent = "";
+  const errorMessageHolder = document.getElementById('data-error');
+  errorMessageHolder.textContent = "";
 
-    const title = document.getElementById('title').value;
-    const description = document.getElementById('description').value;
-    const stream = document.getElementById('stream').value;
-    const adOne = document.getElementById('adOne').value;
-    const adTwo = document.getElementById('adTwo').value;
+  const title = document.getElementById('title').value;
+  const description = document.getElementById('description').value;
+  const stream = document.getElementById('stream').value;
+  const adOne = document.getElementById('adOne').value;
+  const adTwo = document.getElementById('adTwo').value;
+  const createdAt = Date.now();
 
-    const sessionAds = [];
-    if (sessionAdCount > 0) {
-        for (let i = 1; i < sessionAdCount; i++) {
-            sessionAds.push({
-                sessionAd: document.getElementById(`sessionAd${i}`).value,
-                sessionAdTimeInterval: document.getElementById(`sessionAdTimeInterval${i}`).value
-            });
-        }
+  const sessionAds = [];
+  for (let i = 1; i < sessionAdCount; i++) {
+    sessionAds.push({
+      sessionAd: document.getElementById(`sessionAd${i}`).value,
+      sessionAdTimeInterval: document.getElementById(`sessionAdTimeInterval${i}`).value,
+      adTitle: document.getElementById(`sessionAdTitle${i}`).value
+    });
+  }
+
+  const popupAds = [];
+  for (let i = 1; i < popupAdCount; i++) {
+    popupAds.push({
+      popupAd: document.getElementById(`popupAd${i}`).value,
+      popupAdTimeInterval: document.getElementById(`popupAdTimeInterval${i}`).value,
+      adTitle: document.getElementById(`popupAdTitle${i}`).value,
+      timer: document.getElementById(`popupAdTimer${i}`).value
+    });
+  }
+
+  const streamData = { title, description, stream, adOne, adTwo, sessionAds, popupAds };
+
+  const token = localStorage.getItem('token');
+
+  try {
+    const response = isEdit
+      ? await fetch(`${BASE_URL}/api/streams/${currentStreamId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({...streamData, updatedAt: Date.now()})
+        })
+      : await fetch(`${BASE_URL}/api/streams`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({...streamData, createdAt: Date.now()})
+        });
+
+    const result = await response.json();
+    if (response.status === 200) {
+      fetchStreams();
+      $('#addEditModal').modal('hide');
+    } else {
+      errorMessageHolder.textContent = result.error || "An error occurred.";
     }
-
-    const popupAds = [];
-    if (popupAdCount > 0) {
-        for (let i = 1; i < popupAdCount; i++) {
-            popupAds.push({
-                imgSrc: document.getElementById(`popupAdImgSrc${i}`).value,
-                iFrameSrc: document.getElementById(`popupAdIFrameSrc${i}`).value,
-                popupAdTimeInterval: document.getElementById(`popupAdTimeInterval${i}`).value,
-                adTitle: document.getElementById(`popupAdTitle${i}`).value,
-                timer: document.getElementById(`popupAdTimer${i}`).value
-            });
-        }
-    }
-
-    let streamData = { title, description, stream, adOne, adTwo };
-
-    if (sessionAdCount > 0) {
-        streamData = { ...streamData, sessionAds };
-    }
-    if (popupAdCount > 0) {
-        streamData = { ...streamData, popupAds };
-    }
-
-    const token = localStorage.getItem('token');
-
-    try {
-        const response = isEdit
-            ? await fetch(`${BASE_URL}/api/streams/${currentStreamId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(streamData)
-              })
-            : await fetch(`${BASE_URL}/api/streams`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(streamData)
-              });
-
-        const result = await response.json();
-        if (response.status === 200) {
-            fetchStreams();
-            $('#addEditModal').modal('hide');
-        } else {
-            errorMessageHolder.textContent = result.error || "An error occurred.";
-        }
-    } catch (error) {
-        errorMessageHolder.textContent = "Failed to save the stream.";
-    }
+  } catch (error) {
+    errorMessageHolder.textContent = "Failed to save the stream.";
+  }
 };
 
 function closeModal() {

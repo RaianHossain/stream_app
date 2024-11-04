@@ -1,3 +1,5 @@
+const { create } = require("json-server");
+
 const getStreams = async (req, res) => {
     const {db} = req.app;
     try {
@@ -44,6 +46,7 @@ const createStream = async (req, res) => {
             description,
             adOne,
             adTwo,
+            createdAt: Date.now(),
         };
 
         // If sessionAds exist, include them
@@ -85,7 +88,8 @@ const updateStream = (req, res) => {
                 adOne,
                 adTwo,
                 sessionAds, // Include sessionAds if provided
-                popupAds // Include popupAds if provided
+                popupAds, // Include popupAds if provided
+                updatedAt: Date.now(),
             })
             .write();
 

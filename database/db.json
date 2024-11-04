@@ -5,52 +5,52 @@
       "id": "191963e5-5348-484d-9715-0fcf20029cb1",
       "title": "Man on the boat Edited",
       "stream": "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8",
-      "description": "lorem ipsum dolor sit amet, consectetur adip, lorem ipsum dolor sit amet, consectetur adip, lorem ipsum dolor sit amet, consectetur adip, lorem ipsum dolor sit amet, consectetur adip",
-      "adOne": "<script src=\"//embed.bannerboo.com/becd6e73f33ea\" async></script>",
+      "description": "A detailed description of the stream.",
+      "adOne": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
       "adTwo": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
       "sessionAds": [
         {
-          "sessionAd": "<script src=\\\"//embed.bannerboo.com/becd6e73f33ea\\\" async></script>",
-          "sessionAdTimeInterval": "3"
+          "sessionAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
+          "sessionAdTimeInterval": "3",
+          "adTitle": "Please click the ad bellow to continue the stream"
         }
       ],
       "popupAds": [
         {
-          "imgSrc": "https://static.shareasale.com/image/91983/V7_2-300x250.png",
-          "iFrameSrc": "https://shareasale.com/r.cfm?b=2029993&u=3081106&m=91983&urllink=&afftrack=",
+          "popupAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
           "popupAdTimeInterval": "2",
           "adTitle": "Please click the image below to continue the stream",
           "timer": "30"
-        },
-        {
-          "imgSrc": "https://static.shareasale.com/image/91983/V7_2-300x250.png",
-          "iFrameSrc": "https://shareasale.com/r.cfm?b=2029993&u=3081106&m=91983&urllink=&afftrack=",
-          "popupAdTimeInterval": "2",
-          "adTitle": "Please click the image below to continue the stream",
-          "timer": "10"
         }
       ]
     },
     {
-      "id": "191963e5-5348-484d-9715-0fcf20029cb0",
-      "title": "Man on the boat Edited",
+      "id": "b8b40906-b81b-495d-bb7c-f78890816379",
+      "title": "Check",
       "stream": "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8",
-      "description": "lorem ipsum dolor sit amet, consectetur adip, lorem ipsum dolor sit amet, consectetur adip, lorem ipsum dolor sit amet, consectetur adip, lorem ipsum dolor sit amet, consectetur adip",
-      "adOne": "<script type=\"text/javascript\">\n\tatOptions = {\n\t\t'key' : '28f2c7244a77fec4d34e6491ab667a5d',\n\t\t'format' : 'iframe',\n\t\t'height' : 250,\n\t\t'width' : 300,\n\t\t'params' : {}\n\t};\n</script>\n<script type=\"text/javascript\" src=\"//www.highperformanceformat.com/28f2c7244a77fec4d34e6491ab667a5d/invoke.js\"></script>",
+      "description": "Check",
+      "adOne": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
       "adTwo": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
+      "createdAt": 1730746940443,
       "sessionAds": [
         {
-          "sessionAd": "<script src=\\\"//embed.bannerboo.com/becd6e73f33ea\\\" async></script>",
-          "sessionAdTimeInterval": "3"
+          "sessionAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
+          "sessionAdTimeInterval": "2",
+          "adTitle": "Check"
         }
       ],
       "popupAds": [
         {
-          "imgSrc": "https://static.shareasale.com/image/91983/V7_2-300x250.png",
-          "iFrameSrc": "https://shareasale.com/r.cfm?b=2029993&u=3081106&m=91983&urllink=&afftrack=",
-          "popupAdTimeInterval": "2",
+          "popupAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
+          "popupAdTimeInterval": "5",
           "adTitle": "Please click the image below to continue the stream",
           "timer": "10"
+        },
+        {
+          "popupAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
+          "popupAdTimeInterval": "7",
+          "adTitle": "check",
+          "timer": "20"
         }
       ]
     }
