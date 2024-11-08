@@ -11,7 +11,12 @@
       "sessionAds": [
         {
           "sessionAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
-          "sessionAdTimeInterval": "3",
+          "sessionAdTimeInterval": "30",
+          "adTitle": "Please click the ad bellow to continue the stream"
+        },
+        {
+          "sessionAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
+          "sessionAdTimeInterval": "80",
           "adTitle": "Please click the ad bellow to continue the stream"
         }
       ],
@@ -35,8 +40,13 @@
       "sessionAds": [
         {
           "sessionAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
-          "sessionAdTimeInterval": "2",
-          "adTitle": "Check"
+          "sessionAdTimeInterval": "30",
+          "adTitle": "Please click the ad bellow to continue the stream"
+        },
+        {
+          "sessionAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
+          "sessionAdTimeInterval": "60",
+          "adTitle": "Please click the ad bellow to continue the stream"
         }
       ],
       "popupAds": [
@@ -53,6 +63,30 @@
           "timer": "20"
         }
       ]
+    },
+    {
+      "id": "dadfd1df-a7b7-4fcb-bbde-9121b5d62dfb",
+      "title": "Final Check",
+      "stream": "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8",
+      "description": "Final Check",
+      "adOne": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
+      "adTwo": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
+      "createdAt": 1731009694755,
+      "sessionAds": [
+        {
+          "sessionAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
+          "sessionAdTimeInterval": "30",
+          "adTitle": "Please Check",
+          "timer": "10"
+        },
+        {
+          "sessionAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
+          "sessionAdTimeInterval": "60",
+          "adTitle": "Please Check 2",
+          "timer": "10"
+        }
+      ],
+      "popupAds": []
     }
   ]
 }

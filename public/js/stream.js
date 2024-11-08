@@ -21,7 +21,7 @@ const fetchStreams = async () => {
                 'Content-Type': 'application/json', 
             }
         });
-        console.log(response);
+        // console.log(response);
         if (!response.ok) {
             throw new Error('Network response was not ok ' + response.statusText);
         }
@@ -33,18 +33,24 @@ const fetchStreams = async () => {
     }
 };
 
+
 const populateTable = (streams) => {
     
     tableBody.innerHTML = ''; // Clear existing table data
     if(streams.length > 0) {
 
         streams.forEach(stream => {
-            const row = document.createElement('tr');        
+            const row = document.createElement('tr');   
+            const streamLink = `show.html?id=${stream.id}`;
+
             row.innerHTML = `
             <td>${stream.title}</td>
             <td>${stream.description}</td>
             <td>
-                <a href="show.html?id=${stream.id}"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
+                <button id="copy_btn_${stream.id}" class="btn btn-secondary btn-sm" onclick="copyToClipboard('${streamLink}', '${stream.id}')">
+                    <i id="copy_btn_icon_${stream.id}" class="fa fa-copy" aria-hidden="true"></i>
+                </button>
+                <a target="_blank" href="show.html?id=${stream.id}"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
                 <button class="btn btn-warning btn-sm" onclick="openEditModal('${stream.id}')" data-toggle="modal" data-target="#addEditModal"><i class="fa fa-pencil-square" aria-hidden="true"></i></button>
                 <button class="btn btn-danger btn-sm" onclick="deleteStream('${stream.id}')"><i class="fa fa-trash" aria-hidden="true"></i></button>
             </td>
@@ -82,8 +88,6 @@ const deleteStream = async (streamId) => {
     }
 };
 
-
-
 let isEdit = false;  
 let currentStreamId = null; 
 
@@ -103,10 +107,11 @@ const removeAd = (type, adGroupId) => {
 const addSessionAd = () => {
   const sessionAdContainer = document.getElementById('sessionAdContainer');
   const adHtml = `
-    <div class="d-flex mb-2" id="sessionAdGroup${sessionAdCount}">
-      <textarea class="form-control" id="sessionAd${sessionAdCount}" name="sessionAds[${sessionAdCount}][sessionAd]" placeholder="Session Ad ${sessionAdCount}"></textarea>
-      <input type="number" class="form-control mx-2" id="sessionAdTimeInterval${sessionAdCount}" name="sessionAds[${sessionAdCount}][sessionAdTimeInterval]" placeholder="Time Interval (seconds)" />
-      <input type="text" class="form-control mx-2" id="sessionAdTitle${sessionAdCount}" name="sessionAds[${sessionAdCount}][adTitle]" placeholder="Ad Title" />
+    <div class="border p-3 rounded mb-2" id="sessionAdGroup${sessionAdCount}">
+      <textarea class="form-control mb-2" id="sessionAd${sessionAdCount}" name="sessionAds[${sessionAdCount}][sessionAd]" placeholder="Anchor Tag ${sessionAdCount}"></textarea>
+      <input type="number" class="form-control mb-2" id="sessionAdTimeInterval${sessionAdCount}" name="sessionAds[${sessionAdCount}][sessionAdTimeInterval]" placeholder="Display Ad After Countdown from Page Load (in Seconds)" />
+      <input type="text" class="form-control mb-2" id="sessionAdTitle${sessionAdCount}" name="sessionAds[${sessionAdCount}][adTitle]" placeholder="Ad Title" />
+      <input type="number" class="form-control mb-2" id="sessionAdTimer${sessionAdCount}" name="sessionAds[${sessionAdCount}][timer]" placeholder="Timer (seconds)" />
       <button type="button" class="btn btn-danger" onclick="removeAd('sessionAd','sessionAdGroup${sessionAdCount}')">-</button>
     </div>
   `;
@@ -152,6 +157,7 @@ const openEditModal = (streamId) => {
       document.getElementById(`sessionAd${sessionAdCount - 1}`).value = ad.sessionAd;
       document.getElementById(`sessionAdTimeInterval${sessionAdCount - 1}`).value = ad.sessionAdTimeInterval;
       document.getElementById(`sessionAdTitle${sessionAdCount - 1}`).value = ad.adTitle;
+      document.getElementById(`sessionAdTimer${sessionAdCount - 1}`).value = ad.timer;
     });
 
     const popupAdContainer = document.getElementById('popupAdContainer');
@@ -204,7 +210,8 @@ const saveChanges = async () => {
     sessionAds.push({
       sessionAd: document.getElementById(`sessionAd${i}`).value,
       sessionAdTimeInterval: document.getElementById(`sessionAdTimeInterval${i}`).value,
-      adTitle: document.getElementById(`sessionAdTitle${i}`).value
+      adTitle: document.getElementById(`sessionAdTitle${i}`).value,
+      timer: document.getElementById(`sessionAdTimer${i}`).value
     });
   }
 
@@ -267,6 +274,38 @@ function closeModal() {
     }
 }
 
+// Function to copy the stream link to the clipboard
+// function copyToClipboard(link) {
+//     navigator.clipboard.writeText(`${BASE_URL}/${link}`)
+//         .then(() => alert("Link copied to clipboard!"))
+//         .catch(err => console.error("Failed to copy text: ", err));
+// }
+
+// Function to copy the stream link to the clipboard
+function copyToClipboard(link, streamId) {
+    const button = document.getElementById(`copy_btn_${streamId}`);
+    const icon = document.getElementById(`copy_btn_icon_${streamId}`);
+
+    navigator.clipboard.writeText(`${BASE_URL}/${link}`)
+        .then(() => {
+            if (icon) {
+                icon.classList.replace('fa-copy', 'fa-check');
+            }
+            setTimeout(() => {
+                revertTheCopyButton(streamId);
+            }, 1500); 
+
+        })
+        .catch(err => console.error("Failed to copy text: ", err));
+}
+
+function revertTheCopyButton(streamId) {
+    const icon = document.getElementById(`copy_btn_icon_${streamId}`);
+    icon.classList.replace('fa-check', 'fa-copy');
+} 
+
+
+
 
 let resizeTimeout;
 window.addEventListener('resize', () => {
@@ -289,3 +328,4 @@ window.addSessionAd = addSessionAd;
 window.addPopupAd = addPopupAd;
 window.removeAd = removeAd;
 window.saveChanges = saveChanges;
+window.copyToClipboard = copyToClipboard;

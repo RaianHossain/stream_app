@@ -132,4 +132,8 @@ body {
   #description-div {
     display: none;
   }
+
+  #videoDescription {
+    display: none;
+  }
 }

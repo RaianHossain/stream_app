@@ -100,7 +100,7 @@ function updateUIWithStreamData(streamData) {
     }
   });
   //
-  
+  playStream();
 
   // Update ads dynamically
   const ad1Container = document.getElementById('ad1');
@@ -127,16 +127,67 @@ function handlePopupAds(createdAt, popupAds) {
     if (now < adShowTime) {
       alert("check")
       adModalTitle(popupAd.adTitle);
-      createPopupAdTimeout(popupAd.popupAd, adShowTime - now, popupAd.timer);
+      createPopupAdTimeout(popupAd.popupAd, adShowTime - now);
     }
   });
 }
 
-function createPopupAdTimeout(adContent, delay, timer) {
+function createPopupAdTimeout(adContent, delay) {
   setTimeout(() => {
-    showAdModal(adContent, timer);
+    showAdModal(adContent);
   }, delay); 
 }
+
+// function handleSessionAd(streamId, sessionAds) {
+//   const lastAdTimeKey = `lastAdTime_${streamId}`;
+//   const sessionStartTimeKey = `sessionStartTime_${streamId}`;
+//   const sessionAdIndexKey = `sessionIndex_${streamId}`;
+
+//   const lastAdTime = localStorage.getItem(lastAdTimeKey);
+//   const sessionStartTime = localStorage.getItem(sessionStartTimeKey);
+//   const sessionAdIndex = localStorage.getTime(sessionAdIndexKey)
+//   const now = Date.now();
+
+//   // If session has not started or has reset based on sessionResetTime
+//   if (!sessionStartTime || (now - sessionStartTime > sessionResetTime * 1000)) {
+//     let currentSessionAdIndex = sessionAdIndex ? sessionAdIndex : 0;    
+
+//     // Start a new session or reset the session start time
+//     localStorage.setItem(sessionStartTimeKey, now);
+//     localStorage.setItem(lastAdTimeKey, now);
+
+//     // Show the session ad after the sessionTimeInterval
+//     setTimeout(() => {
+//       adModalAdTitle(sessionAds[currentSessionAdIndex].adTitle);
+//       showAdModal(sessionAds[currentSessionAdIndex].sessionAd);
+//       localStorage.setItem(lastAdTimeKey, now);
+
+//       if(currentSessionAdIndex + 1 <= sessionAds.length) {
+//         localStorage.setItem(sessionAdIndexKey, currentSessionAdIndex + 1)
+//       } else {
+//         localStorage.setItem(sessionAdIndexKey, 0);
+//       }
+
+//     }, sessionTimeInterval * 1000);
+
+//   } else if (!lastAdTime || now - lastAdTime > sessionResetTime * 1000) {
+//     let currentSessionAdIndex = sessionAdIndex ? sessionAdIndex : 0;
+
+//     // If session has not reset but last ad shown time has passed sessionResetTime, show it again
+//     setTimeout(() => {
+//       adModalAdTitle(sessionAds[currentSessionAdIndex].adTitle);
+//       showAdModal(sessionAds[currentSessionAdIndex].sessionAd);
+//       localStorage.setItem(lastAdTimeKey, now);
+
+//       if(currentSessionAdIndex + 1 <= sessionAds.length) {
+//         localStorage.setItem(sessionAdIndexKey, currentSessionAdIndex + 1)
+//       } else {
+//         localStorage.setItem(sessionAdIndexKey, 0);
+//       }
+
+//     }, sessionTimeInterval * 1000);
+//   }
+// }
 
 function handleSessionAd(streamId, sessionAds) {
   const sessionAdsCount = sessionAds.length;
@@ -145,15 +196,16 @@ function handleSessionAd(streamId, sessionAds) {
   const currentSessionAdIndex = sessionAdIndex ? parseInt(sessionAdIndex) : 0;
 
   for(let i = currentSessionAdIndex; i < sessionAdsCount; i++) {
+    alert('check');
     const sessionAdIntervalMs = parseInt(sessionAds[i].sessionAdTimeInterval) * 1000;
-    createSessionAdTimeout(sessionAds[i].adTitle, sessionAds[i].sessionAd, sessionAdIntervalMs, sessionAds[i].timer, sessionAdIndexKey, i, sessionAdsCount);
+    createSessionAdTimeout(sessionAds[i].adTitle, sessionAds[i].sessionAd, sessionAdIntervalMs, sessionAdIndexKey, i, sessionAdsCount);
   }
 }
 
-function createSessionAdTimeout(modalTitle, adContent, delay, sessionTimer, sessionAdIndexKey, currentIndex, sessionAdsCount) {
+function createSessionAdTimeout(modalTitle, adContent, delay, sessionAdIndexKey, currentIndex, sessionAdsCount) {
   setTimeout(() => {
     adModalTitle(modalTitle);
-    showAdModal(adContent, sessionTimer);
+    showAdModal(adContent);
     if(currentIndex+1 == sessionAdsCount) {
       localStorage.removeItem(sessionAdIndexKey);
     } else {
@@ -167,11 +219,11 @@ function adModalTitle(title) {
   document.getElementById('adTitle').textContent = title;
 }
 
-function showAdModal(adContent, sessionTimer) {
+function showAdModal(adContent) {
   pauseStream();
 
   const adContainer = document.querySelector('.modal-ad');
-  const modifiedAdContent = addOnClickToAnchor(adContent, sessionTimer);
+  const modifiedAdContent = addOnClickToAnchor(adContent);
   loadAdScript(adContainer, modifiedAdContent);
 
   adModalInstance.show();
@@ -192,18 +244,16 @@ function pauseStream() {
 
 function playStream() {
   const player = document.querySelector("media-player");
-  if (player) {
-    player.play().catch(error => {
-      console.error("Playback failed:", error);
-    });
-  }
+  player.addEventListener('canplay', () => {
+      player.play();
+  });
 }
 
 // Helper function to add an onclick event to anchor tags in the ad content
-function addOnClickToAnchor(adContent, sessionTimer) {
+function addOnClickToAnchor(adContent) {
   return adContent.replace(
     /<a /g,
-    `<a onclick="startTimer(${sessionTimer});" `
+    '<a onclick="startTimer(10);" '
   );
 }
 
@@ -228,10 +278,6 @@ function startTimer(seconds) {
 window.onload = function() {
   init();
 };
-
-document.querySelector("media-player").addEventListener('canplay', () => {
-    playStream();
-});
 
 window.closeAdModal = closeAdModal;
 window.startTimer = startTimer;
