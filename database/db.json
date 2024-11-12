@@ -2,70 +2,7 @@
   "users": [],
   "streams": [
     {
-      "id": "191963e5-5348-484d-9715-0fcf20029cb1",
-      "title": "Man on the boat Edited",
-      "stream": "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8",
-      "description": "A detailed description of the stream.",
-      "adOne": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
-      "adTwo": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
-      "sessionAds": [
-        {
-          "sessionAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
-          "sessionAdTimeInterval": "30",
-          "adTitle": "Please click the ad bellow to continue the stream"
-        },
-        {
-          "sessionAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
-          "sessionAdTimeInterval": "80",
-          "adTitle": "Please click the ad bellow to continue the stream"
-        }
-      ],
-      "popupAds": [
-        {
-          "popupAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
-          "popupAdTimeInterval": "2",
-          "adTitle": "Please click the image below to continue the stream",
-          "timer": "30"
-        }
-      ]
-    },
-    {
-      "id": "b8b40906-b81b-495d-bb7c-f78890816379",
-      "title": "Check",
-      "stream": "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8",
-      "description": "Check",
-      "adOne": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
-      "adTwo": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
-      "createdAt": 1730746940443,
-      "sessionAds": [
-        {
-          "sessionAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
-          "sessionAdTimeInterval": "30",
-          "adTitle": "Please click the ad bellow to continue the stream"
-        },
-        {
-          "sessionAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
-          "sessionAdTimeInterval": "60",
-          "adTitle": "Please click the ad bellow to continue the stream"
-        }
-      ],
-      "popupAds": [
-        {
-          "popupAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
-          "popupAdTimeInterval": "5",
-          "adTitle": "Please click the image below to continue the stream",
-          "timer": "10"
-        },
-        {
-          "popupAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
-          "popupAdTimeInterval": "7",
-          "adTitle": "check",
-          "timer": "20"
-        }
-      ]
-    },
-    {
-      "id": "dadfd1df-a7b7-4fcb-bbde-9121b5d62dfb",
+      "id": "final-check-1731323251405",
       "title": "Final Check",
       "stream": "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8",
       "description": "Final Check",

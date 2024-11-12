@@ -38,9 +38,14 @@ const createStream = async (req, res) => {
             return res.status(400).json({ error: "Please provide title, stream, description, adOne, and adTwo" });
         }
 
+        
+        const trimmedTitle = title.trim().replace(/\s+/g, '-').toLowerCase(); 
+        const timestamp = Date.now(); 
+        const uniqueId = `${trimmedTitle}-${timestamp}`; 
+
         // Create new stream object with unique id
         let newStream = {
-            id: crypto.randomUUID({ disableEntropyCache: true }),
+            id: uniqueId,
             title,
             stream,
             description,

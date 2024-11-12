@@ -1,9 +1,6 @@
-
-
 import { HlsJsP2PEngine } from "p2p-media-loader-hlsjs";
 import { API_BASE_URL } from './constant.js';
 
-let currentAdContent = null;
 
 const adModalInstance = new bootstrap.Modal(document.getElementById('adModal'), {
   backdrop: 'static',
@@ -51,70 +48,100 @@ async function fetchStreamData(streamId) {
 }
 
 function updateUIWithStreamData(streamData) {
-  // Update video player
   const videoPlayer = document.getElementById('videoPlayer');
-  // const videoSource = document.getElementById('videoSource');
   const videoTitle = document.getElementById('videoTitle');
   const videoDescription = document.getElementById('videoDescription');
-  const peerCountComp = document.getElementById('peerCount');
 
   videoPlayer.src = streamData.stream;
   videoTitle.textContent = streamData.title;
   videoDescription.textContent = streamData.description;
 
   const player = document.querySelector("media-player");
-  // Inject P2P capabilities into Hls.js
   const HlsWithP2P = HlsJsP2PEngine.injectMixin(window.Hls);
-  let peerCount = 0;
+
   player.addEventListener("provider-change", (event) => {
     const provider = event.detail;
 
-    // Check if the provider is HLS
     if (provider?.type === "hls") {
       provider.library = HlsWithP2P;
-
       provider.config = {
         p2p: {
           core: {
             swarmId: "test893648527354",
-            // other P2P engine config parameters go here
           },
           onHlsJsCreated: (hls) => {
             hls.p2pEngine.addEventListener("onPeerConnect", (params) => {
-              peerCount++;
-              
               console.log("Peer connected:", params.peerId);
             });
             hls.p2pEngine.addEventListener("onPeerDisconnect", (params) => {
-              peerCount--;
-              console.log("Peer connected:", params.peerId);
+              console.log("Peer disconnected:", params.peerId);
             });
-            hls.p2pEngine.addEventListener("onChunkDownloaded", (params) => {
-              
-              console.log("Chunk Downloadinged");
-            });
-            // Subscribe to P2P engine and Hls.js events here
           },
         },
       };
     }
   });
-  //
-  
 
-  // Update ads dynamically
   const ad1Container = document.getElementById('ad1');
   const ad2Container = document.getElementById('ad2');
 
-  // Load the ad scripts properly by creating <script> elements
   loadAdScript(ad1Container, streamData.adOne);
   loadAdScript(ad2Container, streamData.adTwo);
 }
 
-// Function to dynamically load the ad content in the modal container
-function loadAdScript(container, adContent) {
+function loadAdScript(container, adContent, sessionTimer=undefined) {
+  const streamId = getStreamIdFromURL();
+  const streamUrl = `${API_BASE_URL}/show.html?id=${streamId}`;
+
   container.innerHTML = adContent;
+
+  const adLink = container.querySelector('a');
+  if (adLink) {
+    adLink.addEventListener('click', function(event) {
+      event.preventDefault();
+
+      if(sessionTimer !== undefined) {
+        // Store ad content, countdown, and ad state in localStorage for the new tab
+        localStorage.setItem("isCountdownActive", "true");
+        localStorage.setItem("countdownSeconds", sessionTimer); // Set your countdown duration here
+        localStorage.setItem("adContent", adContent); // Store ad content
+      }
+
+      // Open the ad in a new tab, and set the stream in the current tab
+      window.open(adLink.href, '_blank');
+      window.location.href = streamUrl;
+    });
+  }
 }
+
+// Code in the new tab (stream page) to check for countdown state and start timer if needed
+window.addEventListener('load', function() {
+  const isCountdownActive = localStorage.getItem("isCountdownActive");
+  const countdownSeconds = localStorage.getItem("countdownSeconds");
+  const adContent = localStorage.getItem("adContent");
+
+  if (isCountdownActive === "true" && adContent) {
+    const seconds = parseInt(countdownSeconds);
+
+    // Insert ad content into the modal
+    const adContainer = document.querySelector('.modal-ad');
+    adContainer.innerHTML = adContent;
+
+    // Show the modal with the countdown timer
+    adModalInstance.show();
+    startTimer(seconds);
+
+    // Clear the countdown state to avoid restarting it on refresh
+    localStorage.removeItem("isCountdownActive");
+    localStorage.removeItem("countdownSeconds");
+    localStorage.removeItem("adContent");
+  }
+});
+
+
+// function loadAdScript(container, adContent) {
+//   container.innerHTML = adContent;
+// }
 
 function handlePopupAds(createdAt, popupAds) {
   const creationTime = new Date(createdAt).getTime(); 
@@ -125,7 +152,6 @@ function handlePopupAds(createdAt, popupAds) {
     const adShowTime = creationTime + popupAdTimeMs;
 
     if (now < adShowTime) {
-      alert("check")
       adModalTitle(popupAd.adTitle);
       createPopupAdTimeout(popupAd.popupAd, adShowTime - now, popupAd.timer);
     }
@@ -162,7 +188,6 @@ function createSessionAdTimeout(modalTitle, adContent, delay, sessionTimer, sess
   }, delay); 
 }
 
-
 function adModalTitle(title) {
   document.getElementById('adTitle').textContent = title;
 }
@@ -172,15 +197,21 @@ function showAdModal(adContent, sessionTimer) {
 
   const adContainer = document.querySelector('.modal-ad');
   const modifiedAdContent = addOnClickToAnchor(adContent, sessionTimer);
-  loadAdScript(adContainer, modifiedAdContent);
+  loadAdScript(adContainer, modifiedAdContent, sessionTimer);
 
+  // Exit fullscreen if currently active, to ensure ad visibility
+  exitFullscreen();
   adModalInstance.show();
 }
+
+// Call playStream once page loads and stream is ready
+document.querySelector("media-player").addEventListener('canplay', () => {
+  playStream();
+});
 
 function closeAdModal() {  
   adModalInstance.hide();
 
-  // Reset content for the next ad
   document.querySelector('.modal-ad').style.display = 'block';
   document.getElementById('adTitle').textContent = "Click on the image to load the ad";
 }
@@ -193,18 +224,33 @@ function pauseStream() {
 function playStream() {
   const player = document.querySelector("media-player");
   if (player) {
-    player.play().catch(error => {
-      console.error("Playback failed:", error);
-    });
+    // Try playing only after the media is confirmed to be ready
+    setTimeout(() => {
+      player.addEventListener('loadeddata', () => {
+      player.play().catch(error => {
+        console.error("Playback failed:", error);
+      });
+    }, { once: true }); 
+    }, 3000);
   }
 }
 
-// Helper function to add an onclick event to anchor tags in the ad content
 function addOnClickToAnchor(adContent, sessionTimer) {
   return adContent.replace(
     /<a /g,
-    `<a onclick="startTimer(${sessionTimer});" `
+    `<a onclick="startOnceTimer(event, ${sessionTimer});" `
   );
+}
+
+function startOnceTimer(event, seconds) {
+  // Use event.currentTarget to access the clicked element
+  const element = event.currentTarget;
+  
+  // Remove the onclick attribute to disable further clicks
+  element.removeAttribute('onclick');  
+  
+  // Start the timer for the countdown
+  startTimer(seconds);
 }
 
 function startTimer(seconds) {
@@ -225,13 +271,32 @@ function startTimer(seconds) {
   }, 1000);
 }
 
+function enterFullscreen(player) {
+  if (player.requestFullscreen) {
+    player.requestFullscreen();
+  } else if (player.webkitRequestFullscreen) {
+    player.webkitRequestFullscreen();
+  }
+}
+
+// Exit fullscreen only if currently in fullscreen
+function exitFullscreen() {
+  if (document.fullscreenElement) {
+    document.exitFullscreen().catch(error => {
+      console.warn("Failed to exit fullscreen:", error);
+    });
+  }
+}
+
 window.onload = function() {
   init();
 };
 
+// Call playStream once page loads and stream is ready
 document.querySelector("media-player").addEventListener('canplay', () => {
-    playStream();
+  playStream();
 });
 
 window.closeAdModal = closeAdModal;
 window.startTimer = startTimer;
+window.startOnceTimer = startOnceTimer;
