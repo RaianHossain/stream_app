@@ -108,8 +108,8 @@ function loadAdScript(container, adContent, sessionTimer=undefined) {
       }
 
       // Open the ad in a new tab, and set the stream in the current tab
-      window.open(adLink.href, '_blank');
-      window.location.href = streamUrl;
+      window.open(streamUrl, '_blank');
+      window.location.href = adLink.href;
     });
   }
 }
