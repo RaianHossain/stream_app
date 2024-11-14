@@ -1,8 +1,7 @@
 import { HlsJsP2PEngine } from "p2p-media-loader-hlsjs";
 import { API_BASE_URL } from './constant.js';
 
-
-const adModalInstance = new bootstrap.Modal(document.getElementById('adModal'), {
+export const adModalInstance = new bootstrap.Modal(document.getElementById('adModal'), {
   backdrop: 'static',
   keyboard: false
 });
@@ -22,13 +21,14 @@ async function init() {
   const streamData = await fetchStreamData(streamId);
 
   if (streamData) {
+    sessionAds = streamData.sessionAds;
     updateUIWithStreamData(streamData);
-    handleSessionAd(streamId, streamData.sessionAds);
+    handleSessionAd(streamId);
     handlePopupAds(streamData.createdAt, streamData.popupAds);
   }
 }
 
-function getStreamIdFromURL() {
+export function getStreamIdFromURL() {
   const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get('id'); 
 }
@@ -89,59 +89,30 @@ function updateUIWithStreamData(streamData) {
   loadAdScript(ad2Container, streamData.adTwo);
 }
 
-function loadAdScript(container, adContent, sessionTimer=undefined) {
-  const streamId = getStreamIdFromURL();
-  const streamUrl = `${API_BASE_URL}/show.html?id=${streamId}`;
-
-  container.innerHTML = adContent;
-
-  const adLink = container.querySelector('a');
-  if (adLink) {
-    adLink.addEventListener('click', function(event) {
-      event.preventDefault();
-
-      if(sessionTimer !== undefined) {
-        // Store ad content, countdown, and ad state in localStorage for the new tab
-        localStorage.setItem("isCountdownActive", "true");
-        localStorage.setItem("countdownSeconds", sessionTimer); // Set your countdown duration here
-        localStorage.setItem("adContent", adContent); // Store ad content
-      }
-
-      // Open the ad in a new tab, and set the stream in the current tab
-      window.open(streamUrl, '_blank');
-      window.location.href = adLink.href;
-    });
-  }
-}
-
-// Code in the new tab (stream page) to check for countdown state and start timer if needed
-window.addEventListener('load', function() {
+// On page load, resume any active ad countdown
+window.addEventListener('load', function () {
   const isCountdownActive = localStorage.getItem("isCountdownActive");
   const countdownSeconds = localStorage.getItem("countdownSeconds");
   const adContent = localStorage.getItem("adContent");
+  const tabChange = localStorage.getItem("tabChange") === "true";
 
   if (isCountdownActive === "true" && adContent) {
     const seconds = parseInt(countdownSeconds);
+    isTabChangeEnabled = tabChange;
 
-    // Insert ad content into the modal
     const adContainer = document.querySelector('.modal-ad');
     adContainer.innerHTML = adContent;
 
-    // Show the modal with the countdown timer
     adModalInstance.show();
-    startTimer(seconds);
+    startCountdown(seconds);
+    if (isTabChangeEnabled) checkForWindowChange();
 
-    // Clear the countdown state to avoid restarting it on refresh
     localStorage.removeItem("isCountdownActive");
     localStorage.removeItem("countdownSeconds");
     localStorage.removeItem("adContent");
+    localStorage.removeItem("tabChange");
   }
 });
-
-
-// function loadAdScript(container, adContent) {
-//   container.innerHTML = adContent;
-// }
 
 function handlePopupAds(createdAt, popupAds) {
   const creationTime = new Date(createdAt).getTime(); 
@@ -153,55 +124,15 @@ function handlePopupAds(createdAt, popupAds) {
 
     if (now < adShowTime) {
       adModalTitle(popupAd.adTitle);
-      createPopupAdTimeout(popupAd.popupAd, adShowTime - now, popupAd.timer);
+      createPopupAdTimeout(popupAd.popupAd, adShowTime - now, popupAd.timer, popupAd.adTitle);
     }
   });
 }
 
-function createPopupAdTimeout(adContent, delay, timer) {
+function createPopupAdTimeout(adContent, delay, timer, modalTitle) {
   setTimeout(() => {
-    showAdModal(adContent, timer);
+    showAdModal(adContent, timer, modalTitle);
   }, delay); 
-}
-
-function handleSessionAd(streamId, sessionAds) {
-  const sessionAdsCount = sessionAds.length;
-  const sessionAdIndexKey = `sessionIndex_${streamId}`;
-  const sessionAdIndex = localStorage.getItem(sessionAdIndexKey);
-  const currentSessionAdIndex = sessionAdIndex ? parseInt(sessionAdIndex) : 0;
-
-  for(let i = currentSessionAdIndex; i < sessionAdsCount; i++) {
-    const sessionAdIntervalMs = parseInt(sessionAds[i].sessionAdTimeInterval) * 1000;
-    createSessionAdTimeout(sessionAds[i].adTitle, sessionAds[i].sessionAd, sessionAdIntervalMs, sessionAds[i].timer, sessionAdIndexKey, i, sessionAdsCount);
-  }
-}
-
-function createSessionAdTimeout(modalTitle, adContent, delay, sessionTimer, sessionAdIndexKey, currentIndex, sessionAdsCount) {
-  setTimeout(() => {
-    adModalTitle(modalTitle);
-    showAdModal(adContent, sessionTimer);
-    if(currentIndex+1 == sessionAdsCount) {
-      localStorage.removeItem(sessionAdIndexKey);
-    } else {
-      localStorage.setItem(sessionAdIndexKey, currentIndex+1)
-    }
-  }, delay); 
-}
-
-function adModalTitle(title) {
-  document.getElementById('adTitle').textContent = title;
-}
-
-function showAdModal(adContent, sessionTimer) {
-  pauseStream();
-
-  const adContainer = document.querySelector('.modal-ad');
-  const modifiedAdContent = addOnClickToAnchor(adContent, sessionTimer);
-  loadAdScript(adContainer, modifiedAdContent, sessionTimer);
-
-  // Exit fullscreen if currently active, to ensure ad visibility
-  exitFullscreen();
-  adModalInstance.show();
 }
 
 // Call playStream once page loads and stream is ready
@@ -216,7 +147,7 @@ function closeAdModal() {
   document.getElementById('adTitle').textContent = "Click on the image to load the ad";
 }
 
-function pauseStream() {
+export function pauseStream() {
   const player = document.querySelector("media-player");
   player.pause();
 }
@@ -235,52 +166,8 @@ function playStream() {
   }
 }
 
-function addOnClickToAnchor(adContent, sessionTimer) {
-  return adContent.replace(
-    /<a /g,
-    `<a onclick="startOnceTimer(event, ${sessionTimer});" `
-  );
-}
-
-function startOnceTimer(event, seconds) {
-  // Use event.currentTarget to access the clicked element
-  const element = event.currentTarget;
-  
-  // Remove the onclick attribute to disable further clicks
-  element.removeAttribute('onclick');  
-  
-  // Start the timer for the countdown
-  startTimer(seconds);
-}
-
-function startTimer(seconds) {
-  const adTitle = document.getElementById('adTitle');
-  let remainingTime = seconds;
-
-  const interval = setInterval(() => {
-    const minutes = Math.floor(remainingTime / 60);
-    const displayTime = minutes > 0 ? `${minutes}m ${remainingTime % 60}s` : `${remainingTime}s`;
-    adTitle.innerText = displayTime;
-
-    remainingTime -= 1;
-    if (remainingTime < 0) {
-      clearInterval(interval);      
-      closeAdModal();
-      playStream();
-    }
-  }, 1000);
-}
-
-function enterFullscreen(player) {
-  if (player.requestFullscreen) {
-    player.requestFullscreen();
-  } else if (player.webkitRequestFullscreen) {
-    player.webkitRequestFullscreen();
-  }
-}
-
 // Exit fullscreen only if currently in fullscreen
-function exitFullscreen() {
+export function exitFullscreen() {
   if (document.fullscreenElement) {
     document.exitFullscreen().catch(error => {
       console.warn("Failed to exit fullscreen:", error);
@@ -297,6 +184,223 @@ document.querySelector("media-player").addEventListener('canplay', () => {
   playStream();
 });
 
+// Update modal title
+function adModalTitle(title) {
+  const titleElement = document.getElementById('adTitle');
+  if (titleElement) {
+    titleElement.textContent = title;
+  }
+}
+
+/////////session ads/////////////////
+
+let intervalId;
+let countdownSecondsRemaining;
+let isTabChangeEnabled = false;
+let isCountingDown = false;
+let windowChangeCatcherInterval;
+let isWindowFocused = document.hasFocus();
+let sessionAds = []; // List of ad objects
+let currentIndex = 0;
+let sessionAdIndexKey;
+let sessionAdsCount;
+
+// Function to handle session ads
+function handleSessionAd(streamId) {
+  sessionAdsCount = sessionAds.length;
+  sessionAdIndexKey = `sessionIndex_${streamId}`;
+
+  // Fetch the index from localStorage or default to 0
+  const sessionAdIndex = localStorage.getItem(sessionAdIndexKey);
+  currentIndex = sessionAdIndex ? parseInt(sessionAdIndex) : 0;
+
+  // Get the current ad's delay
+  const sessionAdIntervalMs = parseInt(sessionAds[currentIndex].sessionAdTimeInterval) * 1000;
+
+  // Start displaying the current ad
+  createSessionAdTimeout(
+    sessionAds[currentIndex].adTitle, 
+    sessionAds[currentIndex].sessionAd, 
+    sessionAdIntervalMs, 
+    sessionAds[currentIndex].timer, 
+    sessionAds[currentIndex].tabChange
+  );
+}
+
+// Function to create the timeout and show the ad
+function createSessionAdTimeout(modalTitle, adContent, delay, sessionTimer, tabChange) {
+  setTimeout(() => {
+    adModalTitle(modalTitle);
+    showAdModal(adContent, sessionTimer, tabChange, modalTitle);
+  }, delay);
+}
+
+function showAdModal(adContent, sessionTimer, tabChange, modalTitle) {
+  // Pause the stream and prepare the modal
+  pauseStream();
+  const adContainer = document.querySelector('.modal-ad');
+  loadAdScript(adContainer, adContent, sessionTimer, tabChange, modalTitle);
+
+  // Set the ad title and show the modal
+  const adTitleElement = document.getElementById('adTitle');
+  adTitleElement.textContent = modalTitle;
+  exitFullscreen();
+  adModalInstance.show();
+}
+
+// Function to load the ad content and set up click behavior
+function loadAdScript(container, adContent, sessionTimer, tabChange, modalTitle) {
+  const streamId = getStreamIdFromURL();
+  const streamUrl = `${API_BASE_URL}/show.html?id=${streamId}`;
+
+  container.innerHTML = adContent;
+  isTabChangeEnabled = tabChange;
+
+  const adLink = container.querySelector('a');
+  if (adLink) {
+    adLink.addEventListener('click', function (event) {
+      event.preventDefault();
+
+      if (sessionTimer !== undefined) {
+        // Set up countdown
+        countdownSecondsRemaining = sessionTimer;
+        startCountdown(sessionTimer);
+        localStorage.setItem("isCountdownActive", "true");
+        localStorage.setItem("countdownSeconds", sessionTimer);
+        localStorage.setItem("adContent", adContent);
+        localStorage.setItem("tabChange", tabChange);
+      }
+
+      // Open the ad link in a new window
+      openLinks(streamUrl, adLink.href);
+    });
+  }
+}
+
+// Function to open the ad link and focus on the popup
+function openLinks(streamLink, adLink) {
+  const popupWindow = window.open(adLink, '_blank', 'width=600,height=400');
+
+  setTimeout(() => {
+    if (popupWindow) {
+      popupWindow.focus();
+    }
+    window.location.href = streamLink;
+  }, 100);
+}
+
+// Function to start the countdown
+function startCountdown(seconds) {
+  countdownSecondsRemaining = seconds;
+
+  function countdownStep() {
+    const countdownElement = document.getElementById('countdownDisplay');
+    if (countdownElement) {
+      if (countdownSecondsRemaining <= 0) {
+        clearInterval(intervalId);
+
+        if (currentIndex + 1 === sessionAdsCount) {
+          // Last ad, remove session index from localStorage
+          localStorage.removeItem(sessionAdIndexKey); // Remove session index
+        } else {
+          // Proceed to the next ad
+          currentIndex++;
+          localStorage.setItem(sessionAdIndexKey, currentIndex);
+
+          const nextAd = sessionAds[currentIndex];
+          const sessionAdIntervalMs = parseInt(nextAd.sessionAdTimeInterval) * 1000;
+          createSessionAdTimeout(nextAd.adTitle, nextAd.sessionAd, sessionAdIntervalMs, nextAd.timer, nextAd.tabChange);
+        }
+        adModalInstance.hide();
+      } else {
+        countdownElement.textContent = countdownSecondsRemaining;
+        countdownSecondsRemaining--;
+      }
+    }
+  }
+
+  countdownStep(); // Run countdown step immediately
+  intervalId = setInterval(countdownStep, 1000);
+  isCountingDown = true;
+
+  if (isTabChangeEnabled) {
+    checkForWindowChange(); // Watch for tab change if needed
+  }
+}
+
+function pauseCountdown() {
+  if (isCountingDown) {
+    clearInterval(intervalId);
+    isCountingDown = false;
+    console.log("Countdown paused");
+  }
+}
+
+function resumeCountdown() {
+  if (!isCountingDown && countdownSecondsRemaining > 0) {
+    intervalId = setInterval(() => {
+      if (countdownSecondsRemaining > 0) {
+        document.getElementById('countdownDisplay').textContent = countdownSecondsRemaining;
+        countdownSecondsRemaining--;
+      } else {
+        clearInterval(intervalId);
+        clearInterval(windowChangeCatcherInterval);
+        adModalInstance.hide();
+      }
+    }, 1000);
+    isCountingDown = true;
+    console.log("Countdown resumed");
+  }
+}
+
+// Function to monitor window focus
+function checkForWindowChange() {
+  windowChangeCatcherInterval = setInterval(() => {
+    if (document.hasFocus() && !isWindowFocused) {
+      pauseCountdown();
+      console.log("User returned to the stream tab.");
+      isWindowFocused = true;
+    } else if (!document.hasFocus() && isWindowFocused) {
+      resumeCountdown();
+      console.log("User left the stream tab.");
+      isWindowFocused = false;
+    }
+  }, 1000);
+}
+
+// Handle page reload
+window.addEventListener('load', function () {
+  sessionAdsCount = sessionAds.length;
+  const isCountdownActive = localStorage.getItem("isCountdownActive");
+  const countdownSeconds = localStorage.getItem("countdownSeconds");
+  const adContent = localStorage.getItem("adContent");
+  const tabChange = localStorage.getItem("tabChange") === "true";
+
+  if (isCountdownActive === "true" && adContent) {
+    const seconds = parseInt(countdownSeconds);
+    isTabChangeEnabled = tabChange;
+
+    const adContainer = document.querySelector('.modal-ad');
+    adContainer.innerHTML = adContent;
+
+    const adTitleContainer = document.querySelector('.modal-title');
+    adTitleContainer.textContent = adTitle;
+
+    adModalInstance.show();
+    startCountdown(seconds);
+    pauseCountdown();
+    checkForWindowChange();
+
+    // Clear localStorage flags after reload
+    localStorage.removeItem("isCountdownActive");
+    localStorage.removeItem("countdownSeconds");
+    localStorage.removeItem("adContent");
+    localStorage.removeItem("tabChange");
+  }
+});
+
+
+/////////session ads/////////////////
+
+
 window.closeAdModal = closeAdModal;
-window.startTimer = startTimer;
-window.startOnceTimer = startOnceTimer;

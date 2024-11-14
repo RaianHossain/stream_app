@@ -112,6 +112,9 @@ const addSessionAd = () => {
       <input type="number" class="form-control mb-2" id="sessionAdTimeInterval${sessionAdCount}" name="sessionAds[${sessionAdCount}][sessionAdTimeInterval]" placeholder="Display Ad After Countdown from Page Load (in Seconds)" />
       <input type="text" class="form-control mb-2" id="sessionAdTitle${sessionAdCount}" name="sessionAds[${sessionAdCount}][adTitle]" placeholder="Ad Title" />
       <input type="number" class="form-control mb-2" id="sessionAdTimer${sessionAdCount}" name="sessionAds[${sessionAdCount}][timer]" placeholder="Timer (seconds)" />
+      <label>Tab Change</label>
+      <input type="checkbox"  id="sessionAdTabChange${sessionAdCount}" name="sessionAds[${sessionAdCount}][tabChange]" />
+      <br>
       <button type="button" class="btn btn-danger" onclick="removeAd('sessionAd','sessionAdGroup${sessionAdCount}')">-</button>
     </div>
   `;
@@ -158,6 +161,7 @@ const openEditModal = (streamId) => {
       document.getElementById(`sessionAdTimeInterval${sessionAdCount - 1}`).value = ad.sessionAdTimeInterval;
       document.getElementById(`sessionAdTitle${sessionAdCount - 1}`).value = ad.adTitle;
       document.getElementById(`sessionAdTimer${sessionAdCount - 1}`).value = ad.timer;
+      document.getElementById(`sessionAdTabChange${sessionAdCount - 1}`).checked = ad.tabChange;
     });
 
     const popupAdContainer = document.getElementById('popupAdContainer');
@@ -211,7 +215,8 @@ const saveChanges = async () => {
       sessionAd: document.getElementById(`sessionAd${i}`).value,
       sessionAdTimeInterval: document.getElementById(`sessionAdTimeInterval${i}`).value,
       adTitle: document.getElementById(`sessionAdTitle${i}`).value,
-      timer: document.getElementById(`sessionAdTimer${i}`).value
+      timer: document.getElementById(`sessionAdTimer${i}`).value,
+      tabChange: document.getElementById(`sessionAdTabChange${i}`).checked,
     });
   }
 

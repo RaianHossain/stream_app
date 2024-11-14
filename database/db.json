@@ -12,15 +12,43 @@
       "sessionAds": [
         {
           "sessionAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
-          "sessionAdTimeInterval": "30",
+          "sessionAdTimeInterval": "10",
           "adTitle": "Please Check",
-          "timer": "10"
+          "timer": "5",
+          "tabChange": false
+        },
+        {
+          "sessionAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
+          "sessionAdTimeInterval": "30",
+          "adTitle": "Please Check 2",
+          "timer": "5",
+          "tabChange": true
         },
         {
           "sessionAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
           "sessionAdTimeInterval": "60",
           "adTitle": "Please Check 2",
-          "timer": "10"
+          "timer": "5",
+          "tabChange": true
+        }
+      ],
+      "popupAds": []
+    },
+    {
+      "id": "check-1731590047049",
+      "title": "Check",
+      "stream": "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8",
+      "description": "Check",
+      "adOne": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
+      "adTwo": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
+      "createdAt": 1731590047049,
+      "sessionAds": [
+        {
+          "sessionAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
+          "sessionAdTimeInterval": "10",
+          "adTitle": "Check",
+          "timer": "5",
+          "tabChange": true
         }
       ],
       "popupAds": []

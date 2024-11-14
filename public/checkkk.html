@@ -1,0 +1,37 @@
+<!-- public/error.html -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Error</title>
+  </head>
+  <body>
+    <h1>Something went wrong!</h1>
+    <p>An unexpected error occurred. Please try again later.</p>
+
+    <script>
+    // Handle tab visibility changes
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          console.log("Tab or window lost focus (visibilitychange).");
+        } else {
+          console.log("Tab or window gained focus (visibilitychange).");
+        }
+      });
+
+      let isWindowFocused = document.hasFocus();
+
+      // Check window focus periodically
+      setInterval(() => {
+        if (document.hasFocus() && !isWindowFocused) {
+          console.log("User returned to the window.");
+          isWindowFocused = true;
+        } else if (!document.hasFocus() && isWindowFocused) {
+          console.log("User left the window.");
+          isWindowFocused = false;
+        }
+      }, 1000); // Check every second (1000 ms)
+    </script>
+  </body>
+</html>

@@ -5,3 +5,6 @@ trash.txt
 .env
 /public/check.html
 /public/js/check.js
+/public/js/show_prev.js
+/public/js/showAds
+/public/js/show_prev_latest.js
