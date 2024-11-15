@@ -1,0 +1,16 @@
+.checkbox-container {
+  display: flex;
+  align-items: center; /* Align label and checkbox vertically */
+  gap: 10px; /* Add space between label and checkbox */
+}
+
+input[type="checkbox"] {
+  width: 20px; /* Increase width of the checkbox */
+  height: 20px; /* Increase height of the checkbox */
+  cursor: pointer; /* Add pointer cursor for better UX */
+}
+
+label {
+  font-size: 16px; /* Adjust font size for better readability */
+  margin: 0; /* Ensure no extra margins */
+}

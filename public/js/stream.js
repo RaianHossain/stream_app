@@ -110,10 +110,12 @@ const addSessionAd = () => {
     <div class="border p-3 rounded mb-2" id="sessionAdGroup${sessionAdCount}">
       <textarea class="form-control mb-2" id="sessionAd${sessionAdCount}" name="sessionAds[${sessionAdCount}][sessionAd]" placeholder="Anchor Tag ${sessionAdCount}"></textarea>
       <input type="number" class="form-control mb-2" id="sessionAdTimeInterval${sessionAdCount}" name="sessionAds[${sessionAdCount}][sessionAdTimeInterval]" placeholder="Display Ad After Countdown from Page Load (in Seconds)" />
-      <input type="text" class="form-control mb-2" id="sessionAdTitle${sessionAdCount}" name="sessionAds[${sessionAdCount}][adTitle]" placeholder="Ad Title" />
+      <input type="text" class="form-control mb-2" id="sessionAdTitle${sessionAdCount}" name="sessionAds[${sessionAdCount}][adTitle]" placeholder="Ad Title ${sessionAdCount}" />
       <input type="number" class="form-control mb-2" id="sessionAdTimer${sessionAdCount}" name="sessionAds[${sessionAdCount}][timer]" placeholder="Timer (seconds)" />
-      <label>Tab Change</label>
-      <input type="checkbox"  id="sessionAdTabChange${sessionAdCount}" name="sessionAds[${sessionAdCount}][tabChange]" />
+      <div class="checkbox-container">
+        <label for="sessionAdTabChange${sessionAdCount}">Tab Change</label>
+        <input type="checkbox" id="sessionAdTabChange${sessionAdCount}" name="sessionAds[${sessionAdCount}][tabChange]" />
+      </div>
       <br>
       <button type="button" class="btn btn-danger" onclick="removeAd('sessionAd','sessionAdGroup${sessionAdCount}')">-</button>
     </div>
@@ -154,7 +156,7 @@ const openEditModal = (streamId) => {
 
     const sessionAdContainer = document.getElementById('sessionAdContainer');
     sessionAdContainer.innerHTML = '';
-    sessionAdCount = 1;
+    // sessionAdCount = 1;
     stream.sessionAds.forEach(ad => {
       addSessionAd();
       document.getElementById(`sessionAd${sessionAdCount - 1}`).value = ad.sessionAd;
@@ -183,7 +185,7 @@ const openEditModal = (streamId) => {
   }
 };
 
-const openAddModal = () => {
+const openAddModal = () => {    
     const errorMessageHolder = document.getElementById('data-error');
     errorMessageHolder.textContent = "";
 
@@ -268,25 +270,19 @@ const saveChanges = async () => {
 function closeModal() {
     $('#addEditModal').modal('hide'); // This hides the modal
     if(sessionAdCount > 0) {
-        for (let i = 1; i < sessionAdCount; i++) {
-            removeAd(`sessionAdGroup${i}`);
+        let initialSessionAdCount = sessionAdCount;
+        for (let i = 1; i <= initialSessionAdCount; i++) {
+            removeAd('sessionAd', `sessionAdGroup${i}`);
         }
     }
     if(popupAdCount > 0) {
-        for (let i = 1; i < popupAdCount; i++) {
-            removeAd(`popupAdGroup${i}`);
+        let initialPopupAdCount = popupAdCount;
+        for (let i = 1; i <= initialPopupAdCount; i++) {
+            removeAd('popupAd', `popupAdGroup${i}`);
         }
     }
 }
 
-// Function to copy the stream link to the clipboard
-// function copyToClipboard(link) {
-//     navigator.clipboard.writeText(`${BASE_URL}/${link}`)
-//         .then(() => alert("Link copied to clipboard!"))
-//         .catch(err => console.error("Failed to copy text: ", err));
-// }
-
-// Function to copy the stream link to the clipboard
 function copyToClipboard(link, streamId) {
     const button = document.getElementById(`copy_btn_${streamId}`);
     const icon = document.getElementById(`copy_btn_icon_${streamId}`);

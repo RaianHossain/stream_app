@@ -12,22 +12,22 @@
       "sessionAds": [
         {
           "sessionAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
-          "sessionAdTimeInterval": "10",
+          "sessionAdTimeInterval": "5",
           "adTitle": "Please Check",
           "timer": "5",
           "tabChange": false
         },
         {
           "sessionAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
-          "sessionAdTimeInterval": "30",
+          "sessionAdTimeInterval": "5",
           "adTitle": "Please Check 2",
           "timer": "5",
           "tabChange": true
         },
         {
           "sessionAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
-          "sessionAdTimeInterval": "60",
-          "adTitle": "Please Check 2",
+          "sessionAdTimeInterval": "5",
+          "adTitle": "Please Check 3",
           "timer": "5",
           "tabChange": true
         }
@@ -47,7 +47,7 @@
           "sessionAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
           "sessionAdTimeInterval": "10",
           "adTitle": "Check",
-          "timer": "5",
+          "timer": "10",
           "tabChange": true
         }
       ],
