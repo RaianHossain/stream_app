@@ -117,4 +117,82 @@ const deleteStream = (req, res) => {
     }
 }
 
-module.exports.StreamController = { getStreams, createStream, updateStream, deleteStream, getStream };
+
+
+const unescapeHtml = (safe) => {
+    return safe
+        .replace(/&amp;/g, "&")
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&quot;/g, '"')
+        .replace(/&#039;/g, "'");
+};
+
+const getHistats = async (req, res) => {
+    const { db } = req.app;
+
+    try {
+        const histatsEntry = db.get('hitstat').find({ id: 1 }).value();
+
+        if (!histatsEntry || !histatsEntry.content) {
+            return res.status(404).json({ error: 'Hitstat content not found' });
+        }
+
+        // Unescape the content for rendering
+        const unescapedContent = unescapeHtml(histatsEntry.content);
+
+        res.status(200).json({ content: unescapedContent });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+
+
+const escapeHtml = (unsafe) => {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+};
+
+const saveHistats = async (req, res) => {
+    const { db } = req.app;
+    const { content } = req.body; // Expecting the Hitstat content (div + script) from the request body
+
+    if (!content) {
+        return res.status(400).json({ error: 'Content is required' });
+    }
+
+    try {
+        // Escape the HTML/script before saving
+        const escapedContent = escapeHtml(content);
+
+        // Save or update Hitstat content in the database
+        const existingEntry = db.get('hitstat').find({ id: 1 }).value();
+
+        if (existingEntry) {
+            // Update the existing entry
+            db.get('hitstat').find({ id: 1 }).assign({ content: escapedContent }).write();
+        } else {
+            // Create a new entry
+            db.get('hitstat').push({ id: 1, content: escapedContent }).write();
+        }
+
+        res.status(200).json({ message: 'Hitstat content saved successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+
+  
+  
+
+
+
+module.exports.StreamController = { getStreams, createStream, updateStream, deleteStream, getStream, getHistats, saveHistats };

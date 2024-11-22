@@ -10,6 +10,7 @@ document.getElementById('adModal').addEventListener('hidden.bs.modal', () => {
   playStream();
 }) 
 
+
 async function init() {
   const streamId = getStreamIdFromURL();
 

@@ -11,4 +11,5 @@ router.post('/', checkAuth, StreamController.createStream);
 router.put('/:id', checkAuth, StreamController.updateStream);
 router.delete('/:id', StreamController.deleteStream);
 
+
 module.exports = router;
