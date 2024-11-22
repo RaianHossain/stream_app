@@ -24,12 +24,66 @@ async function init() {
   if (streamData) {
     sessionAds = streamData.sessionAds;
     updateUIWithStreamData(streamData);
-    handleSessionAd(streamId);
+    handleSessionAd(streamId, streamData.sessionAds);
     handlePopupAds(streamData.createdAt, streamData.popupAds);
+  }
+
+  await injectHitstatScript();
+}
+
+async function injectHitstatScript() {
+  try {
+    // Fetch the content from your API
+    const response = await fetch(`${API_BASE_URL}/api/hitstat`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch hitstat content.");
+    }
+
+    // Parse the response as JSON
+    const hitstatData = await response.json();
+    const hitstatContent = hitstatData?.content;
+
+    if (hitstatContent) {
+      // Create a temporary container to parse the HTML content
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = hitstatContent;
+
+      // Extract and append non-script content into the head
+      const nonScriptElements = tempDiv.querySelectorAll("div, noscript");
+      nonScriptElements.forEach((element) => {
+        document.head.appendChild(element);
+      });
+
+      // Extract and execute <script> tags
+      const scriptTags = tempDiv.querySelectorAll("script");
+      scriptTags.forEach((scriptTag) => {
+        const newScript = document.createElement("script");
+        if (scriptTag.src) {
+          // If the script is external
+          newScript.src = scriptTag.src;
+          newScript.async = true;  // Make sure it's async
+        } else {
+          // If the script is inline
+          newScript.textContent = scriptTag.textContent;
+        }
+
+        // Append the script tag to the head for execution
+        document.head.appendChild(newScript);
+      });
+
+      console.log("Hitstat content injected into head successfully.");
+    } else {
+      console.warn("No content found in hitstat response.");
+    }
+  } catch (error) {
+    console.error("Error injecting hitstat content:", error);
   }
 }
 
-export function getStreamIdFromURL() {
+
+
+
+function getStreamIdFromURL() {
   const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get('id'); 
 }
@@ -48,44 +102,64 @@ async function fetchStreamData(streamId) {
   }
 }
 
+
 function updateUIWithStreamData(streamData) {
+  // Update video player
   const videoPlayer = document.getElementById('videoPlayer');
   const videoTitle = document.getElementById('videoTitle');
   const videoDescription = document.getElementById('videoDescription');
+  const videoDescriptionAccordion = document.getElementById('accordion-description');
 
   videoPlayer.src = streamData.stream;
   videoTitle.textContent = streamData.title;
   videoDescription.textContent = streamData.description;
+  videoDescriptionAccordion.textContent = streamData.description;
 
   const player = document.querySelector("media-player");
+  // Inject P2P capabilities into Hls.js
   const HlsWithP2P = HlsJsP2PEngine.injectMixin(window.Hls);
-
+  let peerCount = 0;
   player.addEventListener("provider-change", (event) => {
     const provider = event.detail;
 
+    // Check if the provider is HLS
     if (provider?.type === "hls") {
       provider.library = HlsWithP2P;
+
       provider.config = {
         p2p: {
           core: {
             swarmId: "test893648527354",
+            // other P2P engine config parameters go here
           },
           onHlsJsCreated: (hls) => {
             hls.p2pEngine.addEventListener("onPeerConnect", (params) => {
+              peerCount++;
+              
               console.log("Peer connected:", params.peerId);
             });
             hls.p2pEngine.addEventListener("onPeerDisconnect", (params) => {
-              console.log("Peer disconnected:", params.peerId);
+              peerCount--;
+              console.log("Peer connected:", params.peerId);
             });
+            hls.p2pEngine.addEventListener("onChunkDownloaded", (params) => {
+              
+              console.log("Chunk Downloadinged");
+            });
+            // Subscribe to P2P engine and Hls.js events here
           },
         },
       };
     }
   });
+  //
+  playStream();
 
+  // Update ads dynamically
   const ad1Container = document.getElementById('ad1');
   const ad2Container = document.getElementById('ad2');
 
+  // Load the ad scripts properly by creating <script> elements
   loadAdScript(ad1Container, streamData.adOne);
   loadAdScript(ad2Container, streamData.adTwo);
 }
@@ -143,7 +217,7 @@ function playStream() {
 }
 
 // Exit fullscreen only if currently in fullscreen
-export function exitFullscreen() {
+function exitFullscreen() {
   if (document.fullscreenElement) {
     document.exitFullscreen().catch(error => {
       console.warn("Failed to exit fullscreen:", error);
@@ -169,13 +243,6 @@ function adModalTitle(title) {
 }
 
 /////////session ads/////////////////
-
-// function loadAdScript(container, adContent, sessionTimer, tabChange, modalTitle) {
-//   const streamId = getStreamIdFromURL();
-//   const streamUrl = `${API_BASE_URL}/show.html?id=${streamId}`;
-
-//   container.innerHTML = adContent;
-// }
 
 function loadAdScript(container, adContent) {
   container.innerHTML = adContent;
@@ -227,7 +294,7 @@ function addOnClickToAnchor(adContent, timerInSeconds, tabChange) {
 }
 
 function showAdModal(adContent) {
-  pauseStream();
+  // pauseStream();
   exitFullscreen();
 
   const adContainer = document.querySelector('.modal-ad');
@@ -308,3 +375,7 @@ function checkForWindowChange() {
 
 window.closeAdModal = closeAdModal;
 window.startTimer = startTimer;
+
+document.addEventListener('contextmenu', function(event) {
+  event.preventDefault();  // Disable right-click context menu
+});

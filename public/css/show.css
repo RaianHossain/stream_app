@@ -113,6 +113,7 @@ body {
 }
 
 @media (max-width: 768px) {
+  /* For mobile views */
   .desktop-view {
     flex-direction: column;
   }
@@ -129,13 +130,39 @@ body {
     margin: 10px auto;
   }
 
+  /* Hide description div on mobile */
   #description-div {
     display: none;
   }
 
+  /* Show videoDescription div on mobile */
+  #videoDescription {
+    display: block;
+  }
+
+  /* Accordion will be shown on mobile */
+  #accordion-container {
+    display: block;
+  }
+}
+
+@media (min-width: 769px) {
+  /* For desktop views */
+  /* Hide the video description div on desktop */
   #videoDescription {
     display: none;
   }
+
+  /* Show the description div on desktop */
+  #description-div {
+    display: block;
+  }
+
+  /* Accordion will be hidden on desktop */
+  #accordion-container {
+    display: none;
+  }
 }
+
 
 

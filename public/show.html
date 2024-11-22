@@ -29,28 +29,7 @@
     <link rel="stylesheet" href="https://cdn.vidstack.io/player/video.css" />
 
     <!-- Include Vidstack player library from CDN -->
-    <div id="histats_wrapper">
-      <div id="histats_counter"></div>
-      <script type="text/javascript">
-        var _Hasync = _Hasync || [];
-        _Hasync.push(['Histats.start', '1,4907610,4,202,118,45,00011111']);
-        _Hasync.push(['Histats.fasi', '1']);
-        _Hasync.push(['Histats.track_hits', '']);
-        (function() {
-          var hs = document.createElement('script');
-          hs.type = 'text/javascript';
-          hs.async = true;
-          hs.src = ('//s10.histats.com/js15_as.js');
-          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);
-        })();
-      </script>
-      <noscript>
-        <a href="/" target="_blank">
-          <img src="//sstatic1.histats.com/0.gif?4907610&101" alt="" border="0">
-        </a>
-      </noscript>
-    </div>
-
+    <script src="https://cdn.vidstack.io/player" type="module"></script>
   </head>
 
   <body>
@@ -65,14 +44,34 @@
               <media-provider></media-provider>
               <media-video-layout></media-video-layout>
             </media-player>
-            <!-- Video Title -->
+
+            
             <div
               class="border rounded pb-3 ps-2"
               style="background-color: #faf9f6"
             >
-              <div id="videoDescription" class="video-description">
-                Sample Video Title
+              <!-- Video description -->
+              <div id="accordion-container" class="d-block d-md-none">
+                <div class="accordion" id="accordionExample">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        Description
+                      </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                      <div class="accordion-body" id="accordion-description">
+                        
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
+              <!-- Video Description (Visible only on Desktop View) -->
+              <div id="videoDescription" class="d-none d-md-block video-description">
+                Sample Video Description
+              </div>
+
             </div>
           </div>
         </div>

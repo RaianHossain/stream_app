@@ -128,27 +128,24 @@ const unescapeHtml = (safe) => {
         .replace(/&#039;/g, "'");
 };
 
+
+// Example usage in response
 const getHistats = async (req, res) => {
     const { db } = req.app;
 
     try {
-        const histatsEntry = db.get('hitstat').find({ id: 1 }).value();
-
-        if (!histatsEntry || !histatsEntry.content) {
-            return res.status(404).json({ error: 'Hitstat content not found' });
+        const histatsEntry = db.get("hitstat").find({ id: 1 }).value();
+        if (!histatsEntry) {
+            return res.status(404).json({ error: "Hitstat content not found" });
         }
 
-        // Unescape the content for rendering
         const unescapedContent = unescapeHtml(histatsEntry.content);
-
         res.status(200).json({ content: unescapedContent });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: "Internal server error" });
     }
 };
-
-
 
 const escapeHtml = (unsafe) => {
     return unsafe
@@ -159,26 +156,25 @@ const escapeHtml = (unsafe) => {
         .replace(/'/g, "&#039;");
 };
 
+
 const saveHistats = async (req, res) => {
     const { db } = req.app;
-    const { content } = req.body; // Expecting the Hitstat content (div + script) from the request body
+    const { content } = req.body;
 
     if (!content) {
         return res.status(400).json({ error: 'Content is required' });
     }
 
     try {
-        // Escape the HTML/script before saving
+        // Escape the HTML before saving
         const escapedContent = escapeHtml(content);
 
-        // Save or update Hitstat content in the database
+        // Check for existing entry
         const existingEntry = db.get('hitstat').find({ id: 1 }).value();
 
         if (existingEntry) {
-            // Update the existing entry
             db.get('hitstat').find({ id: 1 }).assign({ content: escapedContent }).write();
         } else {
-            // Create a new entry
             db.get('hitstat').push({ id: 1, content: escapedContent }).write();
         }
 
@@ -188,6 +184,7 @@ const saveHistats = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
 
 
   

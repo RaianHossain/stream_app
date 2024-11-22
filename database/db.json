@@ -5,40 +5,27 @@
       "id": "final-check-1731323251405",
       "title": "Real Madrid vs Barcelona - Live Stream",
       "stream": "https://streamt1.sportstreamzone.info/hls/stream.m3u8",
-      "description": "Experience the ultimate clash as Real Madrid takes on Barcelona in the legendary El Clásico! Watch live as these football giants battle for supremacy in a match filled with intensity, skill, and drama. Don’t miss a second of the action—stream it here!. ",
+      "description": "Experience the ultimate clash as Real Madrid takes on Barcelona in the legendary El Clásico! Watch live as these football giants battle for supremacy in a match filled with intensity, skill, and drama. Don’t miss a second of the action—stream it here!.",
       "adOne": "<a target=\"_blank\" href=\"https://www.profitablecpmrate.com/mummcjzy?key=f2dfe4f83cda3939dba190bd57bd3b19\"><img src=\"https://cdn.storageimagedisplay.com/bi/9a/05/ba/9a05bacb12860d84205e922c7bca2873/1728385820.jpg\" border=\"0\" /></a>",
       "adTwo": "<a target=\"_blank\" href=\"https://www.profitablecpmrate.com/mummcjzy?key=f2dfe4f83cda3939dba190bd57bd3b19\"><img src=\"https://cdn.storageimagedisplay.com/bi/f0/0d/e2/f00de253ffddcbbb2666e1c260ecd28d/1728385277.jpg\" border=\"0\" /></a>",
       "createdAt": 1731009694755,
       "sessionAds": [
         {
           "sessionAd": "<a target=\"_blank\" href=\"https://www.google.com/\"><img src=\"https://cdn.storageimagedisplay.com/cti/2a/64/ce/2a64ce8eda8dd978aa075a952612a996/1707813839.png\" border=\"0\" /></a>",
-          "sessionAdTimeInterval": "5",
-          "adTitle": "Please Check",
-          "timer": "5",
-          "tabChange": false
-        },
-        {
-          "sessionAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
-          "sessionAdTimeInterval": "5",
-          "adTitle": "Please Check 2",
-          "timer": "10",
-          "tabChange": true
-        },
-        {
-          "sessionAd": "<a target=\"_blank\" href=\"https://shareasale.com/r.cfm?b=2029993&amp;u=3081106&amp;m=91983&amp;urllink=&amp;afftrack=\"><img src=\"https://static.shareasale.com/image/91983/V7_2-300x250.png\" border=\"0\" /></a>",
-          "sessionAdTimeInterval": "5",
-          "adTitle": "Please Check 3",
-          "timer": "5",
+          "sessionAdTimeInterval": "50",
+          "adTitle": "Click the ad below and watch it for 60 seconds. After that, the ad will close by itself, and you can start watching the game.",
+          "timer": "30",
           "tabChange": true
         }
       ],
-      "popupAds": []
+      "popupAds": [],
+      "updatedAt": 1732274635201
     }
   ],
   "hitstat": [
     {
       "id": 1,
-      "content": "&lt;div id=&#039;histats_wrapper&#039;&gt;\n  &lt;div id=&#039;histats_counter&#039;&gt;&lt;/div&gt;\n  &lt;script type=&#039;text/javascript&#039;&gt;\n    var _Hasync = _Hasync || [];\n    _Hasync.push([&#039;Histats.start&#039;, &#039;1,4907610,4,202,118,45,00011111&#039;]);\n    _Hasync.push([&#039;Histats.fasi&#039;, &#039;1&#039;]);\n    _Hasync.push([&#039;Histats.track_hits&#039;, &#039;&#039;]);\n    (function() {\n      var hs = document.createElement(&#039;script&#039;);\n      hs.type = &#039;text/javascript&#039;;\n      hs.async = true;\n      hs.src = (&#039;//s10.histats.com/js15_as.js&#039;);\n      (document.getElementsByTagName(&#039;head&#039;)[0] || document.getElementsByTagName(&#039;body&#039;)[0]).appendChild(hs);\n    })();\n  &lt;/script&gt;\n  &lt;noscript&gt;\n    &lt;a href=&#039;/&#039; target=&#039;_blank&#039;&gt;\n      &lt;img src=&#039;//sstatic1.histats.com/0.gif?4907610&amp;101&#039; alt=&#039;&#039; border=&#039;0&#039;&gt;\n    &lt;/a&gt;\n  &lt;/noscript&gt;\n&lt;/div&gt;"
+      "content": "&lt;div id=&#039;histats_counter&#039;&gt;&lt;/div&gt;\n  &lt;script type=&#039;text/javascript&#039;&gt;\n    var _Hasync = _Hasync || [];\n    _Hasync.push([&#039;Histats.start&#039;, &#039;1,4907610,4,202,118,45,00011111&#039;]);\n    _Hasync.push([&#039;Histats.fasi&#039;, &#039;1&#039;]);\n    _Hasync.push([&#039;Histats.track_hits&#039;, &#039;&#039;]);\n    (function() {\n      var hs = document.createElement(&#039;script&#039;);\n      hs.type = &#039;text/javascript&#039;;\n      hs.async = true;\n      hs.src = (&#039;//s10.histats.com/js15_as.js&#039;);\n      (document.getElementsByTagName(&#039;head&#039;)[0] || document.getElementsByTagName(&#039;body&#039;)[0]).appendChild(hs);\n    })();\n  &lt;/script&gt;\n  &lt;noscript&gt;\n    &lt;a href=&#039;/&#039; target=&#039;_blank&#039;&gt;\n      &lt;img src=&#039;//sstatic1.histats.com/0.gif?4907610&amp;101&#039; alt=&#039;&#039; border=&#039;0&#039;&gt;\n    &lt;/a&gt;\n  &lt;/noscript&gt;"
     }
   ]
 }
