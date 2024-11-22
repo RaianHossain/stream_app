@@ -237,6 +237,8 @@ function showAdModal(adContent) {
 }
 
 function startTimer(seconds, adLink, tabChange) {
+  clearInterval(intervalId);
+  clearInterval(windowChangeCatcherInterval);
   if(tabChange) {
     document.getElementById('must-watch').hidden = false;
     isPaused = true;
